@@ -1,0 +1,858 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xmlns="http://www.fixprotocol.org/ns/fast/td/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+	<!-- New FAST template derived from FAST_TEMPLATE.xml with defensive absorbers converted
+     to non-stateful tails where appropriate and large per-entry/sequence copy lists collapsed
+     to single tail absorbers to avoid presence-map and copy-state misalignment. -->
+
+	<!-- BEGIN: authoritative FAST_TEMPLATE_2025.xml content -->
+
+	<!-- Standard Headers and Trailers -->
+
+	<template name="StandardHeaderClientInitiated">
+		<string name="SendingTime" id="52" presence="mandatory"></string>
+	</template>
+
+	<template name="StandardHeaderServerInitiated">
+		<string name="SendingTime" id="52" presence="mandatory">
+			<tail/>
+		</string>
+	</template>
+
+	<template name="StandardTrailer">
+		<typeRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Admin Messages -->
+
+	<!-- Logon -->
+	<template name="LogonHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory"></string>
+		<templateRef name="StandardHeaderClientInitiated"/>
+	</template>
+
+	<template name="Logon" id="1" dictionary="Logon">
+		<typeRef name="Logon"/>
+		<templateRef name="LogonHeader"/>
+		<string name="ApplID" id="1180" presence="optional"></string>
+		<uInt32 name="HeartBtInt" id="108" presence="mandatory"></uInt32>
+		<string name="UserName" id="553" presence="optional"></string>
+		<string name="Password" id="554" presence="optional"></string>
+		<string name="NewPassword" id="925" presence="optional"></string>
+		<uInt32 name="SessionStatus" id="1409" presence="optional"></uInt32>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Logout -->
+	<template name="LogoutHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory"></string>
+		<templateRef name="StandardHeaderClientInitiated"/>
+	</template>
+
+	<template name="Logout" id="2" dictionary="Logout">
+		<typeRef name="Logout"/>
+		<templateRef name="LogoutHeader"/>
+		<string name="ApplID" id="1180" presence="optional"></string>
+		<uInt32 name="SessionStatus" id="1409" presence="optional"></uInt32>
+		<string name="Text" id="58" presence="optional"></string>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Heartbeat -->
+	<template name="HeartbeatHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory"></string>
+		<templateRef name="StandardHeaderClientInitiated"/>
+		<!--<templateRef name="StandardHeaderServerInitiated"/>-->
+	</template>
+
+	<template name="Heartbeat" id="3">
+		<typeRef name="Heartbeat"/>
+		<templateRef name="HeartbeatHeader"/>
+		<string name="AppID" id="1180" presence="mandatory"></string>
+		<uInt32 name="AppNewSeqNum" id="1399" presence="mandatory"></uInt32>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Application Messages - Client Initiated -->
+
+	<!-- Security Definition Request -->
+	<!-- Begin of fixing market data -->
+	<!-- FIXED SECURITY DEFINITION GROUPS -->
+	<template name="SecurityStatusHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="f"/>
+		</string>
+		<string name="PossDupFlag" id="43" presence="optional">
+			<default value="N"/>
+		</string>
+		<string name="ExchangeID" id="207" presence="optional"></string>
+		<uInt32 name="PartitionID" id="1000" presence="optional"></uInt32>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<!-- SecurityAltIDs group -->
+	<template name="DefSecurityAltID" id="10" dictionary="DefSecurityAltID">
+		<typeRef name="DefSecurityAltID"/>
+		<!-- per-entry prefix absorber for unexpected vendor bytes -->
+		<string name="SecurityAltIDPrefixRaw" presence="optional">
+			<tail/>
+		</string>
+
+		<string name="SecurityAltID" id="455" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecurityAltIDSource" id="456" presence="optional">
+			<copy/>
+		</string>
+
+		<!-- single raw absorber per-entry to tolerate vendor extensions without using copy-state -->
+		<string name="SecurityAltExtRaw" presence="optional">
+			<tail/>
+		</string>
+	</template>
+
+	<!-- PBValues and PriceBand subgroups -->
+	<template name="NoPriceBandValues" id="32" dictionary="NoPriceBandValues">
+		<typeRef name="NoPriceBandValues"/>
+		<decimal name="HighPBLimitPrice" id="1149" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="LowPBLimitPrice"  id="1148" presence="optional">
+			<copy/>
+		</decimal>
+		<uInt32  name="PBPriceLimitType" id="1306" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32  name="PBBandType"       id="32033" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32  name="PBBandAction"     id="32034" presence="optional">
+			<copy/>
+		</uInt32>
+
+		<string name="PBExtraRaw" presence="optional">
+			<copy/>
+		</string>
+	</template>
+
+	<template name="NoPriceBandLimits" id="33" dictionary="NoPriceBandLimits">
+		<typeRef name="NoPriceBandLimits"/>
+		<uInt32 name="PBPriceLimitUpdate" id="32028" presence="optional">
+			<copy/>
+		</uInt32>
+		<sequence name="PBValues" presence="optional">
+			<length name="PBNoPriceBandValues" id="32032"/>
+			<templateRef name="NoPriceBandValues"/>
+			<string name="PBValuesExt" presence="optional">
+				<copy/>
+			</string>
+		</sequence>
+	</template>
+
+	<!-- MarketSegment group -->
+	<template name="MarketSegment" id="13" dictionary="MarketSegment">
+		<typeRef name="MarketSegment"/>
+		<string name="MarketSegmentID" id="1300" presence="optional">
+			<copy/>
+		</string>
+
+		<sequence name="PBValues" presence="optional">
+			<length name="PBNoPriceBandValues" id="32032"/>
+			<templateRef name="NoPriceBandValues"/>
+		</sequence>
+
+		<!-- raw absorber for trailing vendor fields -->
+		<string name="MarketSegmentRaw" presence="optional">
+			<copy/>
+		</string>
+	</template>
+
+	<sequence name="MarketSegments" presence="optional">
+		<length name="NoMarketSegments" id="1310"/>
+		<templateRef name="MarketSegment"/>
+		<!-- vendor padding or extension bytes between segments -->
+		<string name="MarketSegmentExtra" presence="optional">
+			<copy/>
+		</string>
+	</sequence>
+
+	<!-- End of template correction for security definition -->
+
+	<template name="SecurityDefinitionRequestHeader">
+		<typeRef name="MarketDataRequestHeader"/>
+		<string name="MsgType" id="35" presence="mandatory"></string>
+		<templateRef name="StandardHeaderClientInitiated"/>
+	</template>
+
+	<template name="SecurityDefinitionRequest" id="4" dictionary="SecurityDefinitionRequest">
+		<typeRef name="SecurityDefinitionRequest"/>
+		<templateRef name="SecurityDefinitionRequestHeader"/>
+		<string name="SecurityReqID" id="320" presence="mandatory"></string>
+		<uInt32 name="SubscriptionRequestType" id="263" presence="mandatory"></uInt32>
+		<uInt32 name="SecurityRequestType" id="321" presence="optional"></uInt32>
+		<string name="MarketSegmentID" id="1300" presence="optional"></string>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Market Data Request -->
+	<template name="MarketDataRequestHeader">
+		<typeRef name="MarketDataRequestHeader"/>
+		<string name="MsgType" id="35" presence="mandatory"></string>
+		<templateRef name="StandardHeaderClientInitiated"/>
+	</template>
+
+	<template name="RelatedSymbol" id="5" dictionary="RelatedSymbol">
+		<typeRef name="RelatedSymbol"/>
+		<string name="Symbol" id="55" presence="optional"></string>
+		<string name="ProductComplex" id="1227" presence="optional"></string>
+		<uInt32 name="MDSubBookType" id="1173" presence="optional"></uInt32>
+	</template>
+
+	<template name="MDEntryType" id="6" dictionary="MDEntryType">
+		<typeRef name="MDEntryType"/>
+		<string name="MDEntryType" id="269" presence="optional"></string>
+		<string name="MDEntryTime" id="273" presence="optional"></string>
+		<uInt32 name="MDBookType" id="1021" presence="optional"></uInt32>
+	</template>
+
+	<template name="MarketDataRequest" id="7" dictionary="MarketDataRequest">
+		<typeRef name="MarketDataRequest"/>
+		<templateRef name="MarketDataRequestHeader"/>
+		<string name="MDReqID" id="262" presence="mandatory"></string>
+		<uInt32 name="SubscriptionRequestType" id="263" presence="mandatory"></uInt32>
+		<sequence name="NoMDEntryTypes" presence="optional">
+			<length name="NoMDEntryTypes" id="267"/>
+			<templateRef name="MDEntryType"/>
+		</sequence>
+		<sequence name="NoRelatedSym" presence="optional">
+			<length name="NoRelatedSym" id="146"/>
+			<templateRef name="RelatedSymbol" />
+		</sequence>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Application Messages - Server Initiated -->
+
+	<!-- Security Definition -->
+	<template name="SecurityDefinitionHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="d"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<!-- SecurityDefinition main template reference -->
+	<template name="SecurityDefinition" id="14" dictionary="SecurityDefinition">
+		<templateRef name="SecurityDefinitionHeader"/>
+
+		<string name="ApplID" id="1180" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="ApplSeqNum" id="1181" presence="optional">
+			<increment/>
+		</uInt32>
+		<string name="SecurityReqID" id="320" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="SecurityResponseType" id="323" presence="optional"/>
+		<uInt32 name="LastRptRequested" id="912" presence="optional">
+			<copy/>
+		</uInt32>
+
+		<string name="LastFragment" id="893" presence="optional">
+			<copy/>
+		</string>
+
+		<string name="Symbol" id="55" presence="optional">
+			<copy/>
+		</string>
+		<!-- defensive absorber: capture any vendor bytes appended to Symbol to avoid shifting into following fields -->
+		<string name="SymbolExt" presence="optional">
+			<tail/>
+		</string>
+
+		<string name="SecurityID" id="48" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecurityExchange" id="207" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecurityDesc" id="107" presence="optional">
+			<copy/>
+		</string>
+		<!-- defensive absorber: capture any vendor bytes appended to SecurityDesc to avoid shifting into following fields -->
+		<string name="SecurityDescExt" presence="optional">
+			<tail/>
+		</string>
+		<string name="CFICode" id="461" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecurityType" id="167" presence="optional">
+			<copy/>
+		</string>
+		<string name="Currency" id="15" presence="optional">
+			<copy/>
+		</string>
+
+		<uInt32 name="PriceType" id="423" presence="optional">
+			<copy/>
+		</uInt32>
+		<decimal name="TickSize" id="562" presence="optional">
+			<copy/>
+		</decimal>
+		<uInt32 name="LotSize" id="561" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="TradingCurrency" id="1245" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecurityStatus" id="965" presence="optional">
+			<copy/>
+		</string>
+
+		<!-- overall prefix absorber before SecurityAltIDs sequence to tolerate stray bytes -->
+		<string name="SecurityAltIDsPrefix" presence="optional">
+			<tail/>
+		</string>
+
+		<sequence name="SecurityAltIDs" presence="optional">
+			<length name="NoSecurityAltID" id="454"/>
+			<templateRef name="DefSecurityAltID"/>
+			<!-- sequence-level single tail absorber for vendor-defined trailing fields per SecurityAltIDs sequence -->
+			<string name="SecurityAltIDsExt" presence="optional">
+				<tail/>
+			</string>
+		</sequence>
+
+		<!-- overall absorber to tolerate unexpected vendor fields before MarketSegments -->
+		<string name="SecurityDefPreMarketSegmentsExt" presence="optional">
+			<copy/>
+		</string>
+
+		<sequence name="MarketSegments" presence="optional">
+			<length name="NoMarketSegments" id="1310"/>
+			<templateRef name="MarketSegment"/>
+			<string name="MarketSegmentExtra" presence="optional">
+				<copy/>
+			</string>
+		</sequence>
+
+		<string name="SettlType" id="63" presence="optional">
+			<copy/>
+		</string>
+
+		<string name="SecurityDefExt1" presence="optional">
+			<tail/>
+		</string>
+	</template>
+
+	<!-- Security Status -->
+
+	<template name="SecurityStatus" id="15" dictionary="SecurityStatus">
+		<templateRef name="SecurityStatusHeader"/>
+		<string name="ApplID" id="1180" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="ApplSeqNum" id="1181" presence="mandatory">
+			<increment/>
+		</uInt32>
+		<string name="LastFragment" id="893" presence="optional">
+			<copy/>
+		</string>
+		<string name="Symbol" id="55" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="SecurityTradingStatus" id="326" presence="mandatory">
+			<copy/>
+		</uInt32>
+		<uInt32 name="SecurityTradingEvent" id="1174" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDSubBookType" id="1173" presence="optional">
+			<default value="1"/>
+		</uInt32>
+		<string name="Text" id="58" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="HaltReason" id="327" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="SecurityStatusExt1" presence="optional">
+			<tail/>
+		</string>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- End of authoritative content -->
+
+	<!-- Market Data Snapshot - Full Refresh (W) -->
+	<template name="MarketDataSnapshotHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="W"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="MDPartyID" id="16" dictionary="MDPartyID">
+		<typeRef name="MDPartyID"/>
+		<string name="PartyID" id="448" presence="optional">
+			<copy/>
+		</string>
+		<string name="PartyIDSource" id="447" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="PartyRole" id="452" presence="optional">
+			<copy/>
+		</uInt32>
+	</template>
+
+	<template name="SnapshotMDEntry" id="17" dictionary="SnapshotMDEntry">
+		<typeRef name="SnapshotMDEntry"/>
+		<string name="MDEntryType" id="269" presence="mandatory">
+			<copy/>
+		</string>
+		<string name="MDEntryID" id="278" presence="optional">
+			<copy/>
+		</string>
+		<decimal name="MDEntryPx" id="270" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="Yield" id="236" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="LastParPx" id="669" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="MDEntrySize" id="271" presence="optional">
+			<copy/>
+		</decimal>
+		<string name="MDEntryDate" id="272" presence="optional">
+			<copy/>
+		</string>
+		<string name="MDEntryTime" id="273" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="NumberOfOrders" id="346" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDEntryPositionNo" id="290" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDPriceLevel" id="1023" presence="optional">
+			<copy/>
+		</uInt32>
+		<sequence name="PartyIDs" presence="optional">
+			<length name="NoPartyIDs" id="453"/>
+			<templateRef name="MDPartyID"/>
+		</sequence>
+		<uInt32 name="OpenCloseIndicator" id="30002" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="SettleType" id="63" presence="optional">
+			<copy/>
+		</string>
+		<sequence name="PBValues" presence="optional">
+			<length name="PBNoPriceBandValues" id="32032"/>
+			<templateRef name="NoPriceBandValues"/>
+		</sequence>
+	</template>
+
+	<template name="MDSnapshot" id="18" dictionary="MDSnapshot">
+		<typeRef name="MDSnapshot"/>
+		<templateRef name="MarketDataSnapshotHeader"/>
+		<string name="AppID" id="1180" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="ApplSeqNum" id="1181" presence="optional">
+			<increment/>
+		</uInt32>
+		<uInt32 name="MDBookType" id="1021" presence="optional">
+			<default value="3"/>
+		</uInt32>
+		<string name="LastFragment" id="893" presence="optional">
+			<copy/>
+		</string>
+		<string name="MDReqID" id="262" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="LastMsgSeqNumProcessed" id="369" presence="optional"></uInt32>
+		<uInt32 name="LastRptRequested" id="912" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDSubOrderBookType" id="1173" presence="optional">
+			<default value="1"/>
+		</uInt32>
+		<string name="Symbol" id="55" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="RptSeq" id="83" presence="mandatory"></uInt32>
+		<uInt32 name="MDSecurityTradingStatus" id="1682" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDHaltReason" id="1684" presence="optional">
+			<copy/>
+		</uInt32>
+		<sequence name="SnapshotMDEntries" presence="mandatory">
+			<length name="NoMDEntries" id="268"/>
+			<templateRef name="SnapshotMDEntry"/>
+		</sequence>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Market Data Incremental Refresh (X) -->
+	<template name="MarketDataIncrementalRefreshHeader">
+		<typeRef name="MarketDataIncrementalRefreshHeader"/>
+		<string name="MsgType" id="35">
+			<constant value="X"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="IncRefreshMDEntry" id="19" dictionary="IncRefreshMDEntry">
+		<typeRef name="IncRefreshMDEntry"/>
+		<uInt32 name="MDUpdateAction" id="279" presence="mandatory">
+			<default value="0"/>
+		</uInt32>
+		<uInt32 name="MDSubOrderBookType" id="1173" presence="optional">
+			<default value="1"/>
+		</uInt32>
+		<string name="MDEntryType" id="269" presence="mandatory">
+			<copy/>
+		</string>
+		<string name="MDEntryID" id="278" presence="optional">
+			<copy/>
+		</string>
+		<string name="Symbol" id="55" presence="mandatory">
+			<copy/>
+		</string>
+		<decimal name="MDEntryPx" id="270" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="Yield" id="236" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="LastParPx" id="669" presence="optional">
+			<copy/>
+		</decimal>
+		<decimal name="MDEntrySize" id="271" presence="optional">
+			<copy/>
+		</decimal>
+		<string name="MDEntryDate" id="272" presence="optional">
+			<copy/>
+		</string>
+		<string name="MDEntryTime" id="273" presence="optional">
+			<tail/>
+		</string>
+		<string name="TradeCondition" id="277" presence="optional">
+			<copy/>
+		</string>
+		<string name="MatchType" id="574" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="NumberOfOrders" id="346" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDEntryPositionNo" id="290" presence="optional">
+			<default value="1"/>
+		</uInt32>
+		<uInt32 name="MDPriceLevel" id="1023" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="MDQuoteType" id="1070" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="RptSeq" id="83" presence="optional">
+			<increment/>
+		</uInt32>
+		<sequence name="PartyIDs" presence="optional">
+			<length name="NoPartyIDs" id="453"/>
+			<templateRef name="MDPartyID"/>
+		</sequence>
+		<uInt32 name="TrdSubType" id="829" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="OpenCloseIndicator" id="30002" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="SecurityAltID" id="455" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecurityAltIDSource" id="456" presence="optional">
+			<copy/>
+		</string>
+		<string name="Currency" id="15" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="PriceNotation" id="20002" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="MDMkt" id="275" presence="optional">
+			<copy/>
+		</string>
+		<decimal name="UnderlyingNotional" id="2614" presence="optional">
+			<copy/>
+		</decimal>
+		<string name="UnderlyingNotionalCurrency" id="2615" presence="optional">
+			<copy/>
+		</string>
+		<string name="TZTransactTime" id="1132" presence="optional">
+			<copy/>
+		</string>
+		<string name="TZPublicationTime" id="20001" presence="optional">
+			<copy/>
+		</string>
+		<string name="PTCancellationFlag" id="30213" presence="optional">
+			<copy/>
+		</string>
+		<string name="PTAmendmentFlag" id="30214" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="MDStatType" id="31001" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="TrdType" id="828" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="SettleType" id="63" presence="optional">
+			<copy/>
+		</string>
+		<string name="SecondaryTradeID" id="1040" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="PBPriceLimitEvent" id="32027" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="SecurityTradingStatus" id="326" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="PBAffectedSide" id="32031" presence="optional">
+			<copy/>
+		</uInt32>
+		<uInt32 name="PriceBandLevel" id="32030" presence="optional">
+			<copy/>
+		</uInt32>
+		<sequence name="PBLimits" presence="optional">
+			<length name="PBNoPriceBandLimits" id="32029"/>
+			<templateRef name="NoPriceBandLimits"/>
+		</sequence>
+		<uInt32 name="ImpliedTradeFlag" id="31004" presence="optional">
+			<copy/>
+		</uInt32>
+	</template>
+
+	<template name="MDIncrementalRefresh" id="20" dictionary="MDIncrementalRefresh">
+		<typeRef name="MDIncrementalRefresh"/>
+		<templateRef name="MarketDataIncrementalRefreshHeader"/>
+		<string name="AppID" id="1180" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="ApplSeqNum" id="1181" presence="optional">
+			<increment/>
+		</uInt32>
+		<uInt32 name="MDBookType" id="1021" presence="optional">
+			<default value="3"/>
+		</uInt32>
+		<string name="MDReqID" id="262" presence="optional">
+			<copy/>
+		</string>
+		<string name="LastRptRequested" id="912" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="RecoveryTrdIndicator" id="32026" presence="optional">
+			<copy/>
+		</uInt32>
+		<string name="LastFragment" id="893" presence="optional">
+			<copy value="Y"/>
+		</string>
+		<sequence name="IncRefMDEntries" presence="mandatory">
+			<length name="NoMDEntries" id="268"/>
+			<templateRef name="IncRefreshMDEntry"/>
+		</sequence>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- News (B) -->
+	<template name="NewsHeader">
+		<typeRef name="NewsHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="B"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="NoLinesOfText" id="22" dictionary="NoLinesOfText">
+		<typeRef name="NoLinesOfText"/>
+		<string name="Text" id="58" presence="mandatory"></string>
+	</template>
+
+	<template name="NewsRelatedSymbol" id="23" dictionary="NewsRelatedSymbol">
+		<typeRef name="NewsRelatedSymbol"/>
+		<string name="Symbol" id="55" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="MDSubOrderBookType" id="1173" presence="optional">
+			<default value="1"/>
+		</uInt32>
+	</template>
+
+	<template name="NewsRelatedUnderlyings" id="11" dictionary="NewsRelatedUnderlyings">
+		<typeRef name="NewsRelatedUnderlyings"/>
+		<string name="UnderlyingSymbol" id="311" presence="optional">
+			<copy/>
+		</string>
+	</template>
+
+	<template name="News" id="24" dictionary="News">
+		<typeRef name="News"/>
+		<templateRef name="NewsHeader"/>
+		<string name="ApplID" id="1180" presence="mandatory">
+			<copy/>
+		</string>
+		<uInt32 name="ApplSeqNum" id="1181" presence="optional">
+			<increment/>
+		</uInt32>
+		<string name="OrigTime" id="42" presence="mandatory">
+			<tail/>
+		</string>
+		<uInt32 name="Urgency" id="61" presence="mandatory">
+			<default value="0"/>
+		</uInt32>
+		<string name="Headline" id="148" presence="mandatory"></string>
+		<string name="LastRptRequested" id="912" presence="optional">
+			<copy/>
+		</string>
+		<uInt32 name="NoLinesOfText" id="33"></uInt32>
+		<string name="Text" id="58"></string>
+		<sequence name="RelatedSymbols" presence="optional">
+			<length name="NoRelatedSym" id="146"/>
+			<templateRef name="NewsRelatedSymbol"/>
+		</sequence>
+		<sequence name="RelatedUnderlyings" presence="optional">
+			<length name="NoUnderlyings" id="711"/>
+			<templateRef name="NewsRelatedUnderlyings"/>
+		</sequence>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Market Data Request Reject (Y) -->
+	<template name="MarketDataRequestRejectHeader">
+		<typeRef name="MarketDataRequestRejectHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="Y"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="MarketDataRequestReject" id="25" dictionary="MarketDataRequestReject">
+		<typeRef name="MarketDataRequestReject"/>
+		<templateRef name="MarketDataRequestRejectHeader"/>
+		<string name="MDReqID" id="262" presence="mandatory"></string>
+		<string name="MDReqRejReason" id="281" presence="mandatory"></string>
+		<string name="Text" id="58" presence="optional"></string>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Business Message Reject (j) -->
+	<template name="BusinessMessageRejectHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="j"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="Business Message Reject" id="26">
+		<typeRef name="Business Message Reject"/>
+		<templateRef name="BusinessMessageRejectHeader"/>
+		<string name="BusinessRejectRefID" id="379" presence="optional"></string>
+		<string name="RefMsgType" id="372" presence="optional"></string>
+		<uInt32 name="RefTagID" id="371" presence="optional"></uInt32>
+		<uInt32 name="BusinessRejectReason" id="380" presence="mandatory"></uInt32>
+		<string name="Text" id="58" presence="optional"></string>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Application Message Request Ack (BX) -->
+	<template name="ApplicationMessageRequestAckHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="BX"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="ApplicationMessageRequestAck" id="27">
+		<typeRef name="ApplicationMessageRequestAck"/>
+		<templateRef name="ApplicationMessageRequestAckHeader"/>
+		<string name="ApplResponseID" id="1353" presence="mandatory"></string>
+		<string name="ApplReqID" id="1346" presence="mandatory"></string>
+		<uInt32 name="ApplReqType" id="1347" presence="mandatory"></uInt32>
+		<uInt32 name="ApplResponseType" id="1348" presence="mandatory"></uInt32>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<!-- Application Message Report (BY) -->
+	<template name="ApplicationMessageReportHeader">
+		<typeRef name="StandardHeader"/>
+		<string name="MsgType" id="35" presence="mandatory">
+			<constant value="BY"/>
+		</string>
+		<templateRef name="StandardHeaderServerInitiated"/>
+	</template>
+
+	<template name="ApplicationMessageReport" id="28">
+		<typeRef name="ApplicationMessageReport"/>
+		<templateRef name="ApplicationMessageReportHeader"/>
+		<string name="ApplReportID" id="1356" presence="mandatory"></string>
+		<string name="ApplReqID" id="1346" presence="mandatory"></string>
+		<uInt32 name="ApplReportType" id="1426" presence="mandatory"></uInt32>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+	<template name="ApplicationMessageRequestHeader">
+		<typeRef name="ApplicationMessageRequestHeader"/>
+		<string name="MsgType" id="35" presence="mandatory"></string>
+		<templateRef name="StandardHeaderClientInitiated"/>
+	</template>
+
+	<template name="NoApplID" id="8" dictionary="NoApplID">
+		<typeRef name="NoApplID"/>
+		<string name="RefApplID" id="1355" presence="optional"></string>
+		<uInt32 name="ApplBegSeqNum" id="1182" presence="optional"></uInt32>
+		<uInt32 name="ApplEndSeqNum" id="1183" presence="optional"></uInt32>
+	</template>
+
+	<template name="ApplicationMessageRequest" id="9" dictionary="ApplicationMessageRequest">
+		<typeRef name="ApplicationMessageRequest"/>
+		<templateRef name="ApplicationMessageRequestHeader"/>
+		<string name="ApplReqID" id="1346" presence="mandatory"></string>
+		<uInt32 name="ApplReqType" id="1347" presence="mandatory"></uInt32>
+		<sequence name="NoApplIDs" presence="optional">
+			<length name="NoApplIDsl" id="1351"/>
+			<templateRef name="NoApplID"/>
+		</sequence>
+		<templateRef name="StandardTrailer"/>
+	</template>
+
+
+	<!-- END: authoritative FAST_TEMPLATE_2025.xml content -->
+
+	<!-- BEGIN: unique FAST_TEMPLATE.xml content -->
+
+	<template name="MDEntryTypeT5" id="9996">
+		<typeRef name="MDEntryType"/>
+		<string name="MDEntryType" id="269" presence="optional"></string>
+		<string name="MDEntryTime" id="273" presence="optional"></string>
+		<uInt32 name="MDBookType" id="1021" presence="optional"></uInt32>
+	</template>
+
+	<!-- END: unique FAST_TEMPLATE.xml content -->
+
+</templates>

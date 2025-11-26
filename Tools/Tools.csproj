@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Suppress CS0219 (variable assigned but its value is never used) to keep CI clean while we remove the leftover variable in the next iteration -->
+    <NoWarn>$(NoWarn);CS0219</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- No explicit System.Text.Json package reference; rely on the runtime-provided implementation -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="FAST_TEMPLATE.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample_messages.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="security_definition_2025-11-26.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FastIncomingMessage251126-ACI.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude the OpenFast library sources from the Tools project build -->
+    <Compile Remove="OpenFast\**\*.cs" />
+    <EmbeddedResource Remove="OpenFast\**\*.*" />
+    <None Remove="OpenFast\**\*.*" />
+  </ItemGroup>
+
+</Project>

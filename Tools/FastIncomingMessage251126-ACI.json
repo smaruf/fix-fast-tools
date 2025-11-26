@@ -1,0 +1,525 @@
+[{
+  "_id": {
+    "$oid": "692681b62e0d87bc50792ba9"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:27:34.640Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997496526842771\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:27:01.857654\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMA1tIVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:27:34.640Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692681b62e0d87bc50792b62"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:27:34.548Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997496526842771\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:27:01.857585\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA4tYVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:27:34.548Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692681b52e0d87bc5079298b"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:27:33.941Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997496526842771\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:27:01.757887\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOC3hUFTSUFQQUNJTtO5gsBCRDA3MjhBUEdJMLSAgIKAgqA0MjM1MDAwsIbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:27:33.941Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692681a68809eba1cdc66b5c"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:27:18.698Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997496362028293\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:26:45.357679\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMC5hUFDSUZPUk1VTMGCwEJEMDQ4MEFDSUZMtICAgsDBgqA0NzI1MDAwsIbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:27:18.698Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692681a68809eba1cdc66b3e"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:27:18.565Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997496362028293\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:26:45.357615\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOAxtYVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:27:18.565Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692681a58809eba1cdc66a72"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:27:17.631Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997496362028293\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:26:45.257252\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA1soVBU0lBUEFDSU7TuYLAQkQwNzI4QVBHSTC0gICCgIKgNDIzNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:27:17.631Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69267ee20a617ebb13725d4d"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:15:30.418Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997489282919233\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:14:57.457274\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMA3tIVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:15:30.418Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69267ee20a617ebb13725d07"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:15:30.303Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997489282919233\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:14:57.457154\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA1tIVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:15:30.303Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69267ee10a617ebb13725b4d"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-26T04:15:29.469Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638997489282919233\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251126-04:14:57.358000\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA4MDCwhUFTSUFQQUNJTtO5gsBCRDA3MjhBUEdJMLSAgIKAgqA0MjM1MDAwsIbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-26T04:15:29.469Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6925a10d4258a9083045e9d4"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T12:29:01.054Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996921388889996\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-12:28:28.256864\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMA2tIVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T12:29:01.054Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6925a10c4258a9083045e992"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T12:29:00.951Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996921388889996\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-12:28:28.256730\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOAzsIVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T12:29:00.951Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6925a10c4258a9083045e7e1"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T12:29:00.159Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996921388889996\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-12:28:28.156101\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOAxMLGFQVNJQVBBQ0lO07mCwEJEMDcyOEFQR0kwtICAgoCCoDQyMzUwMDCwhsCIwOfA5cCAgIA=",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T12:29:00.159Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69259f9286732fa28da5352c"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T12:22:42.424Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996917602474837\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-12:22:09.606063\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMA2s4VBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T12:22:42.424Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69259f9286732fa28da534ed"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T12:22:42.319Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996917602474837\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-12:22:09.605920\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOAysIVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T12:22:42.319Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69259f9186732fa28da5333e"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T12:22:41.563Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996917602474837\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-12:22:09.506420\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOAysIVBU0lBUEFDSU7TuYLAQkQwNzI4QVBHSTC0gICCgIKgNDIzNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T12:22:41.563Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692595348453054308b9aeae"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T11:38:28.080Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996891057478163\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-11:37:55.106688\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMA4uIVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T11:38:28.080Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692595338453054308b9ae71"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T11:38:27.975Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996891057478163\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-11:37:55.106470\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA3sIVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T11:38:27.975Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692595338453054308b9acba"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T11:38:27.224Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996891057478163\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-11:37:55.006780\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA4sIVBU0lBUEFDSU7TuYLAQkQwNzI4QVBHSTC0gICCgIKgNDIzNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T11:38:27.224Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692594ccaf0854e6ab652b07"
+  },
+  "Channel": "4",
+  "PacketNum": 119,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T11:36:44.395Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996890022022802\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACIFORMULA\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-11:36:11.556425\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IMAytYVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T11:36:44.395Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692594ccaf0854e6ab652ac4"
+  },
+  "Channel": "4",
+  "PacketNum": 109,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T11:36:44.283Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996890022022802\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ACI\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-11:36:11.556304\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOAzMLSFQUPJsYLAQkQwNDU1QUNJMDCygICCgIKgODc2MzY0NrmGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T11:36:44.283Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "692594cbaf0854e6ab652908"
+  },
+  "Channel": "4",
+  "PacketNum": 41,
+  "SendingDateTimeUtc": {
+    "$date": "2025-11-25T11:36:43.475Z"
+  },
+  "TemplateId": 14,
+  "MsgType": "d",
+  "MsgName": "SecurityDefinition",
+  "ServerId": "1",
+  "SeqNum": null,
+  "MsgText": "{\"$id\":\"1\",\"ApplID\":{\"Value\":\"1\"},\"ApplSeqNum\":null,\"SecurityReqID\":{\"Value\":\"638996890022022802\"},\"SecurityResponseType\":{\"Value\":\"4\"},\"LastRptRequested\":null,\"Symbol\":{\"Value\":\"ASIAPACINS\"},\"SecurityStatus\":{\"Value\":\"\\u0002\"},\"CFICode\":null,\"SecurityType\":{\"Value\":\"CORP\"},\"PriceType\":{\"Value\":\"8658\"},\"SettlType\":null,\"PartitionID\":null,\"SecurityAltIDs\":{\"Items\":[{\"$id\":\"2\",\"SecurityAltID\":{\"Value\":\"\\u0006\"},\"SecurityAltIDSource\":{\"Value\":\"@\"}}]},\"MarketSegments\":null,\"SecurityDesc\":null,\"Name\":\"SecurityDefinition\",\"TemplateId\":14,\"MsgType\":{\"Value\":\"d\"},\"SendingTime\":{\"Value\":\"20251125-11:36:11.455867\"}}",
+  "RawMsg": {
+    "$binary": {
+      "base64": "IOA2t4VBU0lBUEFDSU7TuYLAQkQwNzI4QVBHSTC0gICCgIKgNDIzNTAwMLCGwIjA58DlwICAgA==",
+      "subType": "00"
+    }
+  },
+  "CreatedDateTimeUtc": {
+    "$date": "2025-11-25T11:36:43.475Z"
+  }
+}]

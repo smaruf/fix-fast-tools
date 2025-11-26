@@ -1,0 +1,231 @@
+{
+  "date": "2025-11-26",
+  "total_messages": 9,
+  "note": "*Fields whose names end with 'Ext' or 'Raw' are absorbers and contain no semantic value; they are reported under 'absorbers' and not as data fields.*",
+  "messages": [
+    {
+      "packetNum": 119,
+      "securityReqID": "638997496526842771",
+      "symbol": "ACIFORMULA",
+      "sendingTime": "20251126-04:27:01.857654",
+      "raw_base64": "IMA1tIVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    },
+    {
+      "packetNum": 109,
+      "securityReqID": "638997496526842771",
+      "symbol": "ACI",
+      "sendingTime": "20251126-04:27:01.857585",
+      "raw_base64": "IOA8tYVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    },
+    {
+      "packetNum": 41,
+      "securityReqID": "638997496526842771",
+      "symbol": "ASIAPACINS",
+      "sendingTime": "20251126-04:27:01.757887",
+      "raw_base64": "IOC3hUFTSUFQQUNJTtO5gsBCRDA3MjhBUEdJMLSAgIKAgqA0MjM1MDAwsIbAiMDnwOXAgICA",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    },
+    {
+      "packetNum": 119,
+      "securityReqID": "638997496362028293",
+      "symbol": "ACIFORMULA",
+      "sendingTime": "20251126-04:26:45.357679",
+      "raw_base64": "IMC5hUFDSUZPUk1VTMGCwEJEMDQ4MEFDSUZMtICAgsDBgqA0NzI1MDAwsIbAiMDnwOXAgICA",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    },
+    {
+      "packetNum": 109,
+      "securityReqID": "638997496362028293",
+      "symbol": "ACI",
+      "sendingTime": "20251126-04:26:45.357615",
+      "raw_base64": "IOAxtYVBQ8mxgsBCRDA0NTVBQ0kwMLKAgIKAgqA4NzYzNjQ2uYbAiMDnwOXAgICA",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    },
+    {
+      "packetNum": 41,
+      "securityReqID": "638997496362028293",
+      "symbol": "ASIAPACINS",
+      "sendingTime": "20251126-04:26:45.257252",
+      "raw_base64": "IOA1soVBU0lBUEFDSU7TuYLAQkQwNzI4QVBHSTC0gICCgIKgNDIzNTAwMLCGwIjA58DlwICAgA==",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    },
+    {
+      "packetNum": 119,
+      "securityReqID": "638997489282919233",
+      "symbol": "ACIFORMULA",
+      "sendingTime": "20251126-04:14:57.457274",
+      "raw_base64": "IMA3tIVBQ0lGT1JNVUzBgsBCRDA0ODBBQ0lGTLSAgILAwYKgNDcyNTAwMLCGwIjA58DlwICAgA==",
+      "fields": {
+        "ApplID": { "present": true, "value": "1" },
+        "ApplSeqNum": { "present": false, "value": null },
+        "SecurityResponseType": { "present": true, "value": "4" },
+        "LastRptRequested": { "present": false, "value": null },
+        "SecurityStatus": { "present": true, "value": "\\u0002" },
+        "CFICode": { "present": false, "value": null },
+        "SecurityType": { "present": true, "value": "CORP" },
+        "PriceType": { "present": true, "value": "8658" },
+        "SettlType": { "present": false, "value": null },
+        "SecurityAltIDs_count": 1,
+        "SecurityAltIDs": [
+          { "SecurityAltID": "\\u0006", "SecurityAltIDSource": "@" }
+        ]
+      },
+      "absorbers": {
+        "SymbolExt": true,
+        "SecurityDescExt": true,
+        "SecurityAltExtRaw": true,
+        "SecurityAltIDsExt": true,
+        "SecurityAltIDsPrefix": true,
+        "SecurityDefExt1": true,
+        "MarketSegmentRaw": true,
+        "MarketSegmentExtra": true
+      }
+    }
+  ]
+}
