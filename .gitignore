@@ -52,3 +52,24 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Publish directories
+publish/
+publish-standalone/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# IDE
+.vscode/
+.vs/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAST Message Decoder - Web Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .result-item {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 8px;
+        }
+        
+        .hex-output {
+            font-family: 'Courier New', monospace;
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            word-break: break-all;
+        }
+        
+        .error {
+            background: #fee;
+            border-left-color: #f44;
+            color: #c33;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 FAST Message Decoder</h1>
+            <p class="subtitle">Decode FIX/FAST protocol messages instantly</p>
+        </header>
+        
+        <div class="content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(event, 'base64')">Base64</button>
+                <button class="tab" onclick="switchTab(event, 'hex')">Hex</button>
+                <button class="tab" onclick="switchTab(event, 'file')">Binary File</button>
+                <button class="tab" onclick="switchTab(event, 'json')">JSON File</button>
+            </div>
+            
+            <div id="base64" class="tab-content active">
+                <form onsubmit="decodeBase64(event)">
+                    <div class="form-group">
+                        <label for="base64Input">Base64 Encoded Message:</label>
+                        <textarea id="base64Input" placeholder="Enter base64 encoded FAST message..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="base64TemplateId">Template ID (optional):</label>
+                        <input type="number" id="base64TemplateId" placeholder="e.g., 14">
+                    </div>
+                    <button type="submit">Decode Base64</button>
+                </form>
+            </div>
+            
+            <div id="hex" class="tab-content">
+                <form onsubmit="decodeHex(event)">
+                    <div class="form-group">
+                        <label for="hexInput">Hex Encoded Message:</label>
+                        <textarea id="hexInput" placeholder="Enter hex encoded FAST message (e.g., A1 B2 C3 or A1B2C3)..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="hexTemplateId">Template ID (optional):</label>
+                        <input type="number" id="hexTemplateId" placeholder="e.g., 14">
+                    </div>
+                    <button type="submit">Decode Hex</button>
+                </form>
+            </div>
+            
+            <div id="file" class="tab-content">
+                <form onsubmit="decodeFile(event)">
+                    <div class="form-group">
+                        <label for="fileInput">Binary File:</label>
+                        <input type="file" id="fileInput" accept=".dat,.bin">
+                    </div>
+                    <div class="form-group">
+                        <label for="fileTemplateId">Template ID (optional):</label>
+                        <input type="number" id="fileTemplateId" placeholder="e.g., 14">
+                    </div>
+                    <button type="submit">Decode File</button>
+                </form>
+            </div>
+            
+            <div id="json" class="tab-content">
+                <form onsubmit="decodeJsonFile(event)">
+                    <div class="form-group">
+                        <label for="jsonFileInput">JSON File with FAST Messages:</label>
+                        <input type="file" id="jsonFileInput" accept=".json">
+                    </div>
+                    <button type="submit">Decode JSON File</button>
+                </form>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Decoding...</p>
+            </div>
+            
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            hideResult();
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').classList.add('show');
+            hideResult();
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('show');
+        }
+        
+        function showResult(html, isError = false) {
+            hideLoading();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = html;
+            resultDiv.classList.add('show');
+            if (isError) {
+                resultDiv.classList.add('error');
+            } else {
+                resultDiv.classList.remove('error');
+            }
+        }
+        
+        function hideResult() {
+            document.getElementById('result').classList.remove('show');
+        }
+        
+        function formatDecodedMessage(data) {
+            let html = '<h3>Decoded Message</h3>';
+            
+            if (data.templateId) {
+                html += `<div class="result-item"><span class="result-label">Template ID:</span>${data.templateId}</div>`;
+            }
+            if (data.templateName) {
+                html += `<div class="result-item"><span class="result-label">Template Name:</span>${data.templateName}</div>`;
+            }
+            if (data.msgType) {
+                html += `<div class="result-item"><span class="result-label">Message Type:</span>${data.msgType}</div>`;
+            }
+            if (data.msgName) {
+                html += `<div class="result-item"><span class="result-label">Message Name:</span>${data.msgName}</div>`;
+            }
+            
+            if (data.hexRepresentation) {
+                html += `<div class="result-item"><span class="result-label">Hex:</span><div class="hex-output">${data.hexRepresentation}</div></div>`;
+            }
+            
+            if (data.detectedStrings && data.detectedStrings.length > 0) {
+                html += `<div class="result-item"><span class="result-label">Detected Strings:</span><ul>`;
+                data.detectedStrings.forEach(s => {
+                    html += `<li>${s}</li>`;
+                });
+                html += `</ul></div>`;
+            }
+            
+            if (data.stopBitIntegers && data.stopBitIntegers.length > 0) {
+                html += `<div class="result-item"><span class="result-label">Stop-bit Integers:</span>${data.stopBitIntegers.join(', ')}</div>`;
+            }
+            
+            if (data.fields && Object.keys(data.fields).length > 0) {
+                html += `<div class="result-item"><span class="result-label">Fields:</span><ul>`;
+                for (const [key, value] of Object.entries(data.fields)) {
+                    html += `<li><strong>${key}:</strong> ${value}</li>`;
+                }
+                html += `</ul></div>`;
+            }
+            
+            return html;
+        }
+        
+        async function decodeBase64(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const data = document.getElementById('base64Input').value;
+            const templateId = document.getElementById('base64TemplateId').value;
+            
+            try {
+                const response = await fetch('/api/FastMessage/decode/base64', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        data: data,
+                        templateId: templateId ? parseInt(templateId) : null
+                    })
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showResult(formatDecodedMessage(result));
+                } else {
+                    showResult(`<h3>Error</h3><p>${result.error || 'Unknown error occurred'}</p>`, true);
+                }
+            } catch (error) {
+                showResult(`<h3>Error</h3><p>${error.message}</p>`, true);
+            }
+        }
+        
+        async function decodeHex(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const data = document.getElementById('hexInput').value;
+            const templateId = document.getElementById('hexTemplateId').value;
+            
+            try {
+                const response = await fetch('/api/FastMessage/decode/hex', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        data: data,
+                        templateId: templateId ? parseInt(templateId) : null
+                    })
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showResult(formatDecodedMessage(result));
+                } else {
+                    showResult(`<h3>Error</h3><p>${result.error || 'Unknown error occurred'}</p>`, true);
+                }
+            } catch (error) {
+                showResult(`<h3>Error</h3><p>${error.message}</p>`, true);
+            }
+        }
+        
+        async function decodeFile(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const file = document.getElementById('fileInput').files[0];
+            const templateId = document.getElementById('fileTemplateId').value;
+            
+            if (!file) {
+                showResult(`<h3>Error</h3><p>Please select a file</p>`, true);
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            let url = '/api/FastMessage/decode/file';
+            if (templateId) {
+                url += `?templateId=${templateId}`;
+            }
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showResult(formatDecodedMessage(result));
+                } else {
+                    showResult(`<h3>Error</h3><p>${result.error || 'Unknown error occurred'}</p>`, true);
+                }
+            } catch (error) {
+                showResult(`<h3>Error</h3><p>${error.message}</p>`, true);
+            }
+        }
+        
+        async function decodeJsonFile(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const file = document.getElementById('jsonFileInput').files[0];
+            
+            if (!file) {
+                showResult(`<h3>Error</h3><p>Please select a JSON file</p>`, true);
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/api/FastMessage/decode/json', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    let html = `<h3>Decoded ${result.length} Messages</h3>`;
+                    result.forEach((msg, index) => {
+                        html += `<div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">`;
+                        html += `<h4>Message ${index + 1}</h4>`;
+                        html += formatDecodedMessage(msg);
+                        html += `</div>`;
+                    });
+                    showResult(html);
+                } else {
+                    showResult(`<h3>Error</h3><p>${result.error || 'Unknown error occurred'}</p>`, true);
+                }
+            } catch (error) {
+                showResult(`<h3>Error</h3><p>${error.message}</p>`, true);
+            }
+        }
+    </script>
+</body>
+</html>
