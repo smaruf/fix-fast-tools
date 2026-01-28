@@ -161,6 +161,13 @@ namespace FastTools.CLI
             try
             {
                 var hex = input.Replace(" ", "").Replace("-", "");
+                
+                if (hex.Length % 2 != 0)
+                {
+                    Console.WriteLine("❌ Error: Hex string must have an even number of characters");
+                    return;
+                }
+                
                 var bytes = new List<byte>();
                 for (int i = 0; i < hex.Length; i += 2)
                 {
@@ -261,6 +268,13 @@ namespace FastTools.CLI
                             return;
                         }
                         var hex = args[1].Replace(" ", "").Replace("-", "");
+                        
+                        if (hex.Length % 2 != 0)
+                        {
+                            Console.WriteLine("❌ Error: Hex string must have an even number of characters");
+                            return;
+                        }
+                        
                         var hexBytes = new List<byte>();
                         for (int i = 0; i < hex.Length; i += 2)
                         {

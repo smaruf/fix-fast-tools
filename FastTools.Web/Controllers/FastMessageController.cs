@@ -46,6 +46,13 @@ namespace FastTools.Web.Controllers
             try
             {
                 var hex = request.Data.Replace(" ", "").Replace("-", "");
+                
+                // Validate hex string length is even
+                if (hex.Length % 2 != 0)
+                {
+                    return BadRequest(new { error = "Hex string must have an even number of characters" });
+                }
+                
                 var bytes = new List<byte>();
                 for (int i = 0; i < hex.Length; i += 2)
                 {
@@ -82,16 +89,15 @@ namespace FastTools.Web.Controllers
         [HttpPost("decode/json")]
         public async Task<ActionResult<List<DecodedMessage>>> DecodeJsonFile(IFormFile file)
         {
+            var tempPath = Path.GetTempFileName();
             try
             {
-                var tempPath = Path.GetTempFileName();
                 using (var stream = new FileStream(tempPath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
                 
                 var results = _decoder.DecodeJsonFile(tempPath);
-                System.IO.File.Delete(tempPath);
                 
                 return Ok(results);
             }
@@ -99,6 +105,21 @@ namespace FastTools.Web.Controllers
             {
                 _logger.LogError(ex, "Error decoding JSON file");
                 return BadRequest(new { error = ex.Message });
+            }
+            finally
+            {
+                // Ensure temp file is always deleted
+                if (System.IO.File.Exists(tempPath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(tempPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to delete temporary file: {TempPath}", tempPath);
+                    }
+                }
             }
         }
 
@@ -111,13 +132,13 @@ namespace FastTools.Web.Controllers
 
     public class Base64Request
     {
-        public string Data { get; set; }
+        public required string Data { get; set; }
         public int? TemplateId { get; set; }
     }
 
     public class HexRequest
     {
-        public string Data { get; set; }
+        public required string Data { get; set; }
         public int? TemplateId { get; set; }
     }
 }

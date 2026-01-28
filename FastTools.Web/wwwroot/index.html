@@ -220,10 +220,10 @@
         
         <div class="content">
             <div class="tabs">
-                <button class="tab active" onclick="switchTab('base64')">Base64</button>
-                <button class="tab" onclick="switchTab('hex')">Hex</button>
-                <button class="tab" onclick="switchTab('file')">Binary File</button>
-                <button class="tab" onclick="switchTab('json')">JSON File</button>
+                <button class="tab active" onclick="switchTab(event, 'base64')">Base64</button>
+                <button class="tab" onclick="switchTab(event, 'hex')">Hex</button>
+                <button class="tab" onclick="switchTab(event, 'file')">Binary File</button>
+                <button class="tab" onclick="switchTab(event, 'json')">JSON File</button>
             </div>
             
             <div id="base64" class="tab-content active">
@@ -288,7 +288,7 @@
     </div>
     
     <script>
-        function switchTab(tabName) {
+        function switchTab(event, tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
