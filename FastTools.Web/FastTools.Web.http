@@ -1,0 +1,6 @@
+@FastTools.Web_HostAddress = http://localhost:5001
+
+GET {{FastTools.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
