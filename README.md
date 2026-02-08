@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (FIX Adapted for STreaming) binary data and templates. Now available with **CLI**, **Web UI**, and **API** interfaces with flexible deployment options!
+A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (FIX Adapted for STreaming) binary data and templates. Now available with **CLI**, **Web UI**, **API** interfaces, plus **FIX Protocol client-server** and **ITCH market data consumer** for Bangladesh stock exchanges!
 
 ## ✨ Features
 
@@ -12,12 +12,27 @@ A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (
   - 🌐 **Web UI** - Beautiful web interface for decoding messages
   - 🔌 **REST API** - Programmatic access to decoding services
   - 📦 **Original Console Tool** - Classic command-line utility
+  - 🔧 **FIX Protocol Client/Server** - For DSE-BD and CSE-BD trading
+  - 📊 **ITCH Market Data Consumer** - For DSE-BD market data analysis
 
 - **Message Decoding**:
   - Decode FAST-encoded binary messages
   - Parse FAST template XML files
   - Analyze message structure and content
   - Support multiple input formats (Base64, Hex, binary files, JSON)
+
+- **FIX Protocol Support** (NEW):
+  - FIX 4.4 client and server implementations
+  - Session management with proper logon/logout
+  - Order processing (New, Cancel, Replace, Status)
+  - Comprehensive message logging for analysis
+  - Separate implementations for DSE-BD (port 5001) and CSE-BD (port 5002)
+
+- **ITCH Protocol Support** (NEW):
+  - NASDAQ ITCH 5.0 message parsing
+  - Market data consumption and analysis
+  - Order book reconstruction
+  - Real-time statistics tracking
 
 - **Deployment Options**:
   - 🐍 Run with Python script (`run.py`)
@@ -131,6 +146,51 @@ dotnet run -- --file <path>
 dotnet run -- --json <path>
 ```
 
+### Using FIX Protocol Client/Server (NEW)
+
+#### For DSE-BD (Dhaka Stock Exchange):
+
+```bash
+cd FixProtocol.DSE
+dotnet run
+
+# Select: 1 for Server (listens on port 5001)
+# Select: 2 for Client (connects to port 5001)
+```
+
+#### For CSE-BD (Chittagong Stock Exchange):
+
+```bash
+cd FixProtocol.CSE
+dotnet run
+
+# Select: 1 for Server (listens on port 5002)
+# Select: 2 for Client (connects to port 5002)
+```
+
+**Features:**
+- Session management with logon/logout
+- Order processing (New, Cancel, Replace, Status)
+- Execution reports
+- Comprehensive logging in `./logs/` and session data in `./data/`
+
+### Using ITCH Market Data Consumer (NEW)
+
+```bash
+cd ItchProtocol.DSE
+dotnet run
+
+# Select: 1 for sample messages (demo mode)
+# Select: 2 to process ITCH file
+```
+
+**Features:**
+- Parse NASDAQ ITCH 5.0 messages
+- Track stocks, orders, and trades
+- Real-time statistics
+
+See [FIX_ITCH_README.md](FIX_ITCH_README.md) for detailed documentation on FIX and ITCH implementations.
+
 ## 🚢 Deployment
 
 ### Using Deployment Script
@@ -200,6 +260,31 @@ fix-fast-tools/
 │   ├── Program.cs           # Main application entry point
 │   ├── FAST_TEMPLATE.xml    # FAST template definition
 │   └── [sample files]       # Sample data files
+├── FixProtocol.DSE/         # FIX Protocol for DSE-BD (NEW)
+│   ├── FixServer.cs         # FIX server implementation
+│   ├── FixClient.cs         # FIX client implementation
+│   └── Program.cs           # CLI interface
+├── FixProtocol.CSE/         # FIX Protocol for CSE-BD (NEW)
+│   ├── FixServer.cs         # FIX server implementation
+│   ├── FixClient.cs         # FIX client implementation
+│   └── Program.cs           # CLI interface
+├── ItchProtocol.DSE/        # ITCH Consumer for DSE-BD (NEW)
+│   ├── ItchMessages.cs      # ITCH message structures
+│   ├── ItchConsumer.cs      # ITCH message parser
+│   └── Program.cs           # CLI interface
+├── run.py                   # Python runner script
+├── deploy.sh               # Deployment script
+├── FIX_ITCH_README.md      # FIX/ITCH documentation (NEW)
+├── LICENSE                  # MIT License
+└── README.md               # This file
+```
+├── FastTools.Web/           # Web API and UI
+│   ├── Controllers/         # API controllers
+│   └── wwwroot/            # Web UI (HTML/CSS/JS)
+├── Tools/                   # Original console application
+│   ├── Program.cs           # Main application entry point
+│   ├── FAST_TEMPLATE.xml    # FAST template definition
+│   └── [sample files]       # Sample data files
 ├── run.py                   # Python runner script
 ├── deploy.sh               # Deployment script
 ├── LICENSE                  # MIT License
@@ -244,6 +329,10 @@ The modular architecture makes it easy to extend:
 - [FIX Protocol](https://www.fixtrading.org/) - Official FIX Trading Community
 - [FAST Protocol Specification](https://www.fixtrading.org/standards/fast/) - FIX Adapted for STreaming specification
 - [OpenFAST](https://github.com/openfast/openfast) - Open source FAST protocol implementation
+- [QuickFIX/n](https://quickfixengine.org/n/) - FIX protocol engine for .NET
+- [NASDAQ ITCH Specification](https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf) - ITCH 5.0 protocol
+- [DSE Official](https://www.dsebd.org/) - Dhaka Stock Exchange
+- [CSE Official](https://www.cse.com.bd/) - Chittagong Stock Exchange
 
 ## 📄 License
 
