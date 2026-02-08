@@ -58,9 +58,9 @@ public class ItchConsumer
                 // Parse common header
                 if (data.Length >= offset + 11)
                 {
-                    message.StockLocate = BitConverter.ToUInt16(ReadBigEndian(data, offset + 1, 2), 0);
-                    message.TrackingNumber = BitConverter.ToUInt16(ReadBigEndian(data, offset + 3, 2), 0);
-                    message.Timestamp = BitConverter.ToUInt64(ReadBigEndian(data, offset + 5, 6), 0);
+                    message.StockLocate = BitConverter.ToUInt16(ItchBinaryUtil.ReadBigEndian(data, offset + 1, 2), 0);
+                    message.TrackingNumber = BitConverter.ToUInt16(ItchBinaryUtil.ReadBigEndian(data, offset + 3, 2), 0);
+                    message.Timestamp = BitConverter.ToUInt64(ItchBinaryUtil.ReadBigEndian(data, offset + 5, 6), 0);
                 }
 
                 // Parse message-specific data
@@ -118,7 +118,7 @@ public class ItchConsumer
                     break;
                 }
 
-                var messageLength = BitConverter.ToUInt16(ReadBigEndian(buffer, offset, 2), 0);
+                var messageLength = BitConverter.ToUInt16(ItchBinaryUtil.ReadBigEndian(buffer, offset, 2), 0);
                 
                 if (offset + 2 + messageLength > bytesRead)
                 {
@@ -201,6 +201,15 @@ public class ItchConsumer
                 message.ExecutedShares,
                 message.MatchNumber);
             
+            // Validate executed shares don't exceed order shares
+            if (message.ExecutedShares > order.Shares)
+            {
+                _logger.LogWarning("Protocol violation: ExecutedShares ({Executed}) exceeds order Shares ({OrderShares}) for Ref {Ref}", 
+                    message.ExecutedShares, order.Shares, message.OrderReferenceNumber);
+                _messagesWithErrors++;
+                return;
+            }
+            
             // Update or remove order
             order.Shares -= message.ExecutedShares;
             if (order.Shares == 0)
@@ -250,16 +259,6 @@ public class ItchConsumer
         var minutes = (int)((totalSeconds % 3600) / 60);
         var seconds = totalSeconds % 60;
         return $"{hours:D2}:{minutes:D2}:{seconds:F6}";
-    }
-
-    private static byte[] ReadBigEndian(byte[] data, int offset, int length)
-    {
-        var result = new byte[8];
-        for (int i = 0; i < length && i < 8; i++)
-        {
-            result[7 - i] = data[offset + length - 1 - i];
-        }
-        return result;
     }
 
     /// <summary>

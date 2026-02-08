@@ -118,7 +118,6 @@ static void RunClient(ILoggerFactory loggerFactory)
     dictionary.SetBool("UseDataDictionary", false);
     dictionary.SetString("FileStorePath", "./data/client");
     dictionary.SetString("FileLogPath", "./logs/client");
-    dictionary.SetBool("ReconnectInterval", true);
     dictionary.SetLong("ReconnectInterval", 5);
     
     settings.Set(sessionID, dictionary);
