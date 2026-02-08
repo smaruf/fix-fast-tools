@@ -73,3 +73,8 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# FIX Protocol session data and logs
+**/data/
+**/logs/
+*.log
