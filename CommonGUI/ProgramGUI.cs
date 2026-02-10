@@ -10,6 +10,7 @@ namespace CommonGUI
         private static TextView? outputView;
         private static TextField? inputField;
         private static Label? statusLabel;
+        private static TradingSession? tradingSession;
         
         public static void Main(string[] args)
         {
@@ -19,6 +20,27 @@ namespace CommonGUI
         public static void Run(string[] args)
         {
             Application.Init();
+            
+            // Initialize trading session
+            tradingSession = new TradingSession();
+            tradingSession.OnStatusChanged += (status) => UpdateStatus(status);
+            tradingSession.OnLogMessage += (msg) => AppendOutput($"[TRADING] {msg}\n");
+            tradingSession.OnExecutionReport += (report) =>
+            {
+                AppendOutput($"\n[EXECUTION REPORT]\n");
+                AppendOutput($"  Time: {report.Timestamp:HH:mm:ss}\n");
+                AppendOutput($"  OrderID: {report.OrderID}\n");
+                AppendOutput($"  Symbol: {report.Symbol}\n");
+                AppendOutput($"  Side: {report.Side}\n");
+                AppendOutput($"  Status: {report.OrdStatus}\n");
+                AppendOutput($"  Exec Type: {report.ExecType}\n");
+                AppendOutput($"  Qty: {report.OrderQty}, Filled: {report.CumQty}, Remaining: {report.LeavesQty}\n");
+                if (report.LastPx.HasValue)
+                    AppendOutput($"  Last Price: {report.LastPx}, Last Qty: {report.LastQty}\n");
+                if (!string.IsNullOrEmpty(report.Text))
+                    AppendOutput($"  Text: {report.Text}\n");
+                AppendOutput(new string('─', 60) + "\n");
+            };
             
             try
             {
@@ -51,6 +73,15 @@ namespace CommonGUI
                         new MenuItem("─────", "", null) { CanExecute = () => false }, // Separator
                         new MenuItem("_Log Analyzer", "", () => ShowLogAnalyzer()),
                         new MenuItem("_Dictionary", "", () => ShowDictionary())
+                    }),
+                    new MenuBarItem("T_rading", new MenuItem[]
+                    {
+                        new MenuItem("Session _Login", "", () => ShowSessionLogin()),
+                        new MenuItem("_Place Order", "", () => ShowPlaceOrder()),
+                        new MenuItem("View _Execution Reports", "", () => ShowExecutionReports()),
+                        new MenuItem("_Market Data Feed", "", () => ShowMarketDataFeed()),
+                        new MenuItem("─────", "", null) { CanExecute = () => false }, // Separator
+                        new MenuItem("Session Log_out", "", () => ShowSessionLogout())
                     }),
                     new MenuBarItem("_Server", new MenuItem[]
                     {
@@ -173,13 +204,21 @@ This tool supports:
   • FIX Protocol (DSE-BD, CSE-BD) - Message decoding and server
   • FAST Protocol - High-speed message encoding/decoding  
   • ITCH Protocol (NASDAQ ITCH 5.0) - Market data parsing
+  • Live Trading - FIX session management and order placement
 
 Available Operations:
   1. Decode FIX/FAST/ITCH messages
   2. Analyze session logs
   3. View protocol dictionaries
   4. Start protocol servers (FIX, FAST, ITCH)
-  5. Send test messages to exchanges
+  5. Connect to exchanges and place orders
+  6. Monitor execution reports and market data
+
+Trading Features:
+  • Session Login/Logout to DSE or CSE
+  • Place Buy/Sell orders (Market/Limit)
+  • View execution reports
+  • Market data feed (coming soon)
 
 Quick Start:
   • Use the menu bar to access different tools
@@ -521,6 +560,298 @@ For full documentation, see README.md
             if (statusLabel != null)
             {
                 statusLabel.Text = $"Status: {status} | FIX/FAST/ITCH Universal Runner";
+            }
+        }
+        
+        // Trading Menu Functions
+        
+        private static void ShowSessionLogin()
+        {
+            var dialog = new Dialog("Session Login", 60, 18);
+            
+            var exchangeLabel = new Label("Select Exchange:") { X = 1, Y = 1 };
+            var exchangeRadio = new RadioGroup(new NStack.ustring[] { "DSE", "CSE" }) { X = 1, Y = 2 };
+            
+            var configLabel = new Label("Configuration File:") { X = 1, Y = 4 };
+            var configField = new TextField("") { X = 1, Y = 5, Width = Dim.Fill() - 2 };
+            
+            var browseBtn = new Button("Browse...") { X = 1, Y = 6 };
+            browseBtn.Clicked += () =>
+            {
+                var fileDialog = new OpenDialog("Select FIX Configuration", "Select configuration file");
+                fileDialog.AllowedFileTypes = new[] { ".cfg" };
+                Application.Run(fileDialog);
+                
+                if (!fileDialog.Canceled && fileDialog.FilePath != null)
+                {
+                    configField.Text = fileDialog.FilePath.ToString();
+                }
+            };
+            
+            var infoLabel = new Label("Note: Configuration file should contain FIX session settings") 
+            { 
+                X = 1, 
+                Y = 8,
+                Width = Dim.Fill() - 2
+            };
+            
+            var btnConnect = new Button("Connect") { X = 1, Y = 10 };
+            btnConnect.Clicked += () =>
+            {
+                var exchange = exchangeRadio.SelectedItem == 0 ? "DSE" : "CSE";
+                var configPath = configField.Text?.ToString() ?? "";
+                
+                if (string.IsNullOrWhiteSpace(configPath))
+                {
+                    MessageBox.ErrorQuery("Error", "Please select a configuration file", "OK");
+                    return;
+                }
+                
+                Application.RequestStop();
+                
+                AppendOutput($"\n[Connecting to {exchange}]\n");
+                AppendOutput($"Config: {configPath}\n");
+                
+                if (tradingSession != null)
+                {
+                    bool success = tradingSession.Connect(exchange, configPath);
+                    if (success)
+                    {
+                        AppendOutput("Connection initiated. Waiting for logon...\n");
+                    }
+                    else
+                    {
+                        AppendOutput("Connection failed. Check configuration and logs.\n");
+                        MessageBox.ErrorQuery("Error", "Failed to connect. Check configuration file.", "OK");
+                    }
+                }
+            };
+            
+            var btnCancel = new Button("Cancel") { X = 13, Y = 10 };
+            btnCancel.Clicked += () => Application.RequestStop();
+            
+            dialog.Add(exchangeLabel, exchangeRadio, configLabel, configField, browseBtn, infoLabel, btnConnect, btnCancel);
+            Application.Run(dialog);
+        }
+        
+        private static void ShowPlaceOrder()
+        {
+            if (tradingSession == null || !tradingSession.IsConnected)
+            {
+                MessageBox.ErrorQuery("Error", "Not connected to any exchange. Please login first.", "OK");
+                return;
+            }
+            
+            var dialog = new Dialog("Place Order", 70, 20);
+            
+            var symbolLabel = new Label("Symbol:") { X = 1, Y = 1 };
+            var symbolField = new TextField("") { X = 20, Y = 1, Width = 20 };
+            
+            var sideLabel = new Label("Side:") { X = 1, Y = 3 };
+            var sideRadio = new RadioGroup(new NStack.ustring[] { "BUY", "SELL" }) { X = 20, Y = 3 };
+            
+            var qtyLabel = new Label("Quantity:") { X = 1, Y = 5 };
+            var qtyField = new TextField("") { X = 20, Y = 5, Width = 20 };
+            
+            var orderTypeLabel = new Label("Order Type:") { X = 1, Y = 7 };
+            var orderTypeRadio = new RadioGroup(new NStack.ustring[] { "Market", "Limit" }) { X = 20, Y = 7 };
+            
+            var priceLabel = new Label("Price:") { X = 1, Y = 9 };
+            var priceField = new TextField("") { X = 20, Y = 9, Width = 20 };
+            priceField.Enabled = false;
+            
+            orderTypeRadio.SelectedItemChanged += (args) =>
+            {
+                priceField.Enabled = orderTypeRadio.SelectedItem == 1; // Enable for Limit orders
+                if (orderTypeRadio.SelectedItem == 0)
+                {
+                    priceField.Text = "";
+                }
+            };
+            
+            var btnSend = new Button("Send Order") { X = 1, Y = 11 };
+            btnSend.Clicked += () =>
+            {
+                var symbol = symbolField.Text?.ToString() ?? "";
+                var side = sideRadio.SelectedItem == 0 ? "BUY" : "SELL";
+                var qtyText = qtyField.Text?.ToString() ?? "";
+                var priceText = priceField.Text?.ToString() ?? "";
+                
+                if (string.IsNullOrWhiteSpace(symbol))
+                {
+                    MessageBox.ErrorQuery("Error", "Symbol is required", "OK");
+                    return;
+                }
+                
+                if (!decimal.TryParse(qtyText, out decimal quantity) || quantity <= 0)
+                {
+                    MessageBox.ErrorQuery("Error", "Invalid quantity", "OK");
+                    return;
+                }
+                
+                decimal? price = null;
+                if (orderTypeRadio.SelectedItem == 1) // Limit order
+                {
+                    if (!decimal.TryParse(priceText, out decimal limitPrice) || limitPrice <= 0)
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid price for limit order", "OK");
+                        return;
+                    }
+                    price = limitPrice;
+                }
+                
+                var confirmMsg = $"Send {side} order for {quantity} {symbol}";
+                if (price.HasValue)
+                    confirmMsg += $" @ {price}";
+                else
+                    confirmMsg += " (Market)";
+                confirmMsg += "?";
+                
+                var result = MessageBox.Query("Confirm Order", confirmMsg, "Yes", "No");
+                if (result == 0)
+                {
+                    Application.RequestStop();
+                    tradingSession?.SendOrder(symbol, side, quantity, price);
+                }
+            };
+            
+            var btnCancel = new Button("Cancel") { X = 15, Y = 11 };
+            btnCancel.Clicked += () => Application.RequestStop();
+            
+            dialog.Add(symbolLabel, symbolField, sideLabel, sideRadio, qtyLabel, qtyField,
+                       orderTypeLabel, orderTypeRadio, priceLabel, priceField, btnSend, btnCancel);
+            Application.Run(dialog);
+        }
+        
+        private static void ShowExecutionReports()
+        {
+            if (tradingSession == null)
+            {
+                MessageBox.ErrorQuery("Error", "Trading session not initialized", "OK");
+                return;
+            }
+            
+            var reports = tradingSession.ExecutionReports;
+            
+            var dialog = new Dialog("Execution Reports", 100, 25);
+            
+            var reportView = new TextView
+            {
+                X = 1,
+                Y = 1,
+                Width = Dim.Fill() - 2,
+                Height = Dim.Fill() - 4,
+                ReadOnly = true
+            };
+            
+            if (reports.Count == 0)
+            {
+                reportView.Text = "No execution reports received yet.";
+            }
+            else
+            {
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("EXECUTION REPORTS");
+                sb.AppendLine(new string('═', 95));
+                sb.AppendLine($"{"Time",-10} {"OrderID",-15} {"Symbol",-10} {"Side",-5} {"Status",-15} {"Type",-12} {"Qty",8} {"Filled",8} {"Price",10}");
+                sb.AppendLine(new string('─', 95));
+                
+                foreach (var report in reports.OrderByDescending(r => r.Timestamp))
+                {
+                    var priceStr = report.LastPx.HasValue ? report.LastPx.Value.ToString("F2") : 
+                                   (report.Price.HasValue ? report.Price.Value.ToString("F2") : "-");
+                    
+                    sb.AppendLine($"{report.Timestamp:HH:mm:ss}  {report.OrderID,-15} {report.Symbol,-10} {report.Side,-5} " +
+                                  $"{report.OrdStatus,-15} {report.ExecType,-12} {report.OrderQty,8:F0} {report.CumQty,8:F0} {priceStr,10}");
+                    
+                    if (!string.IsNullOrEmpty(report.Text))
+                    {
+                        sb.AppendLine($"  └─ {report.Text}");
+                    }
+                }
+                
+                sb.AppendLine(new string('═', 95));
+                sb.AppendLine($"Total Reports: {reports.Count}");
+                
+                reportView.Text = sb.ToString();
+            }
+            
+            var btnRefresh = new Button("Refresh") { X = 1, Y = Pos.Bottom(reportView) + 1 };
+            btnRefresh.Clicked += () =>
+            {
+                Application.RequestStop();
+                ShowExecutionReports();
+            };
+            
+            var btnClose = new Button("Close") { X = 13, Y = Pos.Bottom(reportView) + 1 };
+            btnClose.Clicked += () => Application.RequestStop();
+            
+            dialog.Add(reportView, btnRefresh, btnClose);
+            Application.Run(dialog);
+        }
+        
+        private static void ShowMarketDataFeed()
+        {
+            var dialog = new Dialog("Market Data Feed", 80, 20);
+            
+            var infoText = new TextView
+            {
+                X = 1,
+                Y = 1,
+                Width = Dim.Fill() - 2,
+                Height = Dim.Fill() - 4,
+                ReadOnly = true,
+                Text = @"Market Data Feed
+
+This feature will allow you to:
+  • Subscribe to market data feeds from DSE/CSE
+  • View real-time price updates
+  • Monitor order book changes
+  • Track trade executions
+
+Implementation Status: Placeholder
+
+Market data feed functionality will be implemented in a future update.
+It will integrate with the exchange's market data protocols and display
+live market information in this window.
+
+Features planned:
+  ✓ Symbol subscription
+  ✓ Last price updates
+  ✓ Bid/Ask prices
+  ✓ Order book depth
+  ✓ Trade volume
+  ✓ Market status
+"
+            };
+            
+            var btnClose = new Button("Close") { X = 1, Y = Pos.Bottom(infoText) + 1 };
+            btnClose.Clicked += () => Application.RequestStop();
+            
+            dialog.Add(infoText, btnClose);
+            Application.Run(dialog);
+            
+            AppendOutput("\n[Market Data Feed]\n");
+            AppendOutput("Market data feed feature - Coming soon!\n");
+        }
+        
+        private static void ShowSessionLogout()
+        {
+            if (tradingSession == null || !tradingSession.IsConnected)
+            {
+                MessageBox.ErrorQuery("Info", "No active session to disconnect", "OK");
+                return;
+            }
+            
+            var exchange = tradingSession.Exchange;
+            var result = MessageBox.Query("Confirm Logout", 
+                $"Disconnect from {exchange}?", "Yes", "No");
+            
+            if (result == 0)
+            {
+                AppendOutput($"\n[Disconnecting from {exchange}]\n");
+                tradingSession.Disconnect();
+                AppendOutput("Disconnected successfully.\n");
             }
         }
     }
