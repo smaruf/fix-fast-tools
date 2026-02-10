@@ -17,6 +17,13 @@ CommonGUI provides a unified Terminal.Gui-based interface for working with multi
 - Chittagong Stock Exchange (CSE-BD)
 - Generic FIX/FAST/ITCH support
 
+### Trading Capabilities
+- **Session Login** - Connect to DSE or CSE via FIX protocol
+- **Place Orders** - Submit Buy/Sell orders (Market/Limit)
+- **Execution Reports** - View and track order executions
+- **Market Data Feed** - Subscribe to market data (placeholder)
+- **Session Logout** - Disconnect from exchange
+
 ### Protocol Tools
 - **FIX Decoder** - Decode FIX messages with field translation
 - **FAST Decoder** - Decode FAST messages (Base64/Hex)
@@ -69,6 +76,7 @@ When you launch CommonGUI, you'll see:
 1. **Menu Bar** (top)
    - File - Open logs, save output, quit
    - Tools - Access decoders, parsers, and analyzers
+   - Trading - Session management and order placement
    - Server - Start/stop protocol servers
    - Help - About and documentation
 
@@ -99,6 +107,13 @@ When you launch CommonGUI, you'll see:
 - **FIX Decoder** - Decode FIX messages ✓
 - **Log Analyzer** - Analyze session logs ✓
 - **Dictionary** - View FIX dictionary ✓
+
+#### Trading Menu
+- **Session Login** - Connect to DSE or CSE exchange ✓
+- **Place Order** - Submit buy/sell orders (Market/Limit) ✓
+- **View Execution Reports** - Display order execution history ✓
+- **Market Data Feed** - Subscribe to market data (Placeholder)
+- **Session Logout** - Disconnect from exchange ✓
 
 **Planned Features:**
 
@@ -141,6 +156,14 @@ Main GUI application with:
 - Command processing
 - Integration with protocol tools
 
+### TradingSession.cs
+Trading session management with:
+- FIX session connection/disconnection
+- Order placement (Market/Limit)
+- Execution report tracking
+- Event-based UI updates
+- Support for DSE and CSE exchanges
+
 ### Integration
 Uses components from:
 - **ChinPakFIXFastTools** - FIX message decoding and analysis
@@ -157,6 +180,9 @@ Uses components from:
 - ✓ Decode FIX messages
 - ✓ Analyze session logs
 - ✓ Browse FIX dictionary
+- ✓ Connect to exchanges (DSE/CSE)
+- ✓ Place orders (Buy/Sell, Market/Limit)
+- ✓ View execution reports
 
 ### Planned Features
 
@@ -176,13 +202,14 @@ Uses components from:
 ```
 CommonGUI/
 ├── ProgramGUI.cs             - Main GUI application
+├── TradingSession.cs         - Trading session management
 ├── CommonGUI.csproj          - Project file
 └── README.md                 - Documentation
 
 Dependencies:
 ├── ChinPakFIXFastTools       - FIX decoding and analysis
-├── FixProtocol.DSE           - DSE-BD FIX server
-├── FixProtocol.CSE           - CSE-BD FIX server
+├── FixProtocol.DSE           - DSE-BD FIX client/server
+├── FixProtocol.CSE           - CSE-BD FIX client/server
 ├── FastTools.Core            - FAST processing
 └── ItchProtocol.DSE          - ITCH parsing
 ```
@@ -232,7 +259,26 @@ The following exchange integrations are planned for future releases:
 2. View message types and field definitions
 3. Use input commands for specific lookups
 
-### Workflow 4: Start FIX Server (Planned Feature)
+### Workflow 4: Place Trading Order
+1. Use menu: **Trading → Session Login**
+2. Select exchange (DSE or CSE)
+3. Browse and select FIX configuration file
+4. Click **Connect** and wait for logon
+5. Use menu: **Trading → Place Order**
+6. Enter symbol, side (BUY/SELL), quantity
+7. Select order type (Market or Limit)
+8. If Limit order, enter price
+9. Confirm and submit order
+10. View execution reports via **Trading → View Execution Reports**
+
+### Workflow 5: Monitor Execution Reports
+1. After placing orders, use menu: **Trading → View Execution Reports**
+2. View formatted table of all execution reports
+3. See order status, fills, prices, and messages
+4. Click **Refresh** to update display
+5. Use **Trading → Session Logout** to disconnect when done
+
+### Workflow 6: Start FIX Server (Planned Feature)
 1. Use menu: **Server → FIX Server (DSE)**
 2. Currently shows "Not Implemented" message
 3. Requires integration with FixProtocol.DSE/CSE modules
