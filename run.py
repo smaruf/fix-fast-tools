@@ -93,6 +93,24 @@ def run_original_tools(args):
     
     subprocess.run(cmd)
 
+def run_chinpak_tools(args):
+    """Run the ChinPak Tools for DSE"""
+    print("Starting ChinPak Tools for DSE...")
+    chinpak_project = os.path.join('ChinPakTools.DSE', 'ChinPakTools.DSE.csproj')
+    
+    if not os.path.exists(chinpak_project):
+        print(f"Error: ChinPakTools.DSE project not found at {chinpak_project}")
+        sys.exit(1)
+    
+    build_project(chinpak_project)
+    
+    # Check if GUI mode is requested
+    cmd = ['dotnet', 'run', '--project', chinpak_project]
+    if args.gui:
+        cmd.extend(['--', '--gui'])
+    
+    subprocess.run(cmd)
+
 def show_info():
     """Show system and project information"""
     print("FAST Tools - System Information")
@@ -114,6 +132,7 @@ def show_info():
         ('FastTools.CLI', 'Enhanced CLI tool with interactive mode'),
         ('FastTools.Web', 'Web API and UI for FAST message decoding'),
         ('Tools', 'Original console application'),
+        ('ChinPakTools.DSE', 'Universal FIX/FAST/ITCH runner with CLI and GUI for DSE'),
     ]
     
     for name, desc in projects:
@@ -134,6 +153,8 @@ Examples:
   %(prog)s --web                    # Start web server on port 5000
   %(prog)s --web --port 8080        # Start web server on custom port
   %(prog)s --tools                  # Run original console tool
+  %(prog)s --chinpak                # Run ChinPak Tools (CLI mode)
+  %(prog)s --chinpak --gui          # Run ChinPak Tools (GUI mode)
   %(prog)s --info                   # Show system information
         '''
     )
@@ -144,6 +165,10 @@ Examples:
                         help='Run the web interface')
     parser.add_argument('--tools', action='store_true',
                         help='Run the original console tool')
+    parser.add_argument('--chinpak', action='store_true',
+                        help='Run ChinPak Tools for DSE (FIX/FAST/ITCH universal runner)')
+    parser.add_argument('--gui', action='store_true',
+                        help='Launch GUI mode (use with --chinpak)')
     parser.add_argument('--port', type=int,
                         help='Port for web server (default: 5000)')
     parser.add_argument('--info', action='store_true',
@@ -170,6 +195,8 @@ Examples:
         run_web(args)
     elif args.tools:
         run_original_tools(args)
+    elif args.chinpak:
+        run_chinpak_tools(args)
     else:
         # Default: show help and info
         parser.print_help()

@@ -14,6 +14,7 @@ A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (
   - 📦 **Original Console Tool** - Classic command-line utility
   - 🔧 **FIX Protocol Client/Server** - For DSE-BD and CSE-BD trading
   - 📊 **ITCH Market Data Consumer** - For DSE-BD market data analysis
+  - 🎯 **ChinPak Tools** - Universal FIX/FAST/ITCH runner with CLI and GUI
 
 - **Message Decoding**:
   - Decode FAST-encoded binary messages
@@ -33,6 +34,14 @@ A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (
   - Market data consumption and analysis
   - Order book reconstruction
   - Real-time statistics tracking
+
+- **ChinPak Tools for DSE** (NEW):
+  - Universal runner/executor for FIX, FAST, and ITCH messages
+  - Interactive CLI and Terminal GUI interfaces
+  - FIX message decoder with human-readable output
+  - Session log analyzer with comprehensive statistics
+  - FIX field dictionary viewer and search
+  - Integration with all DSE/CSE protocol tools
 
 - **Deployment Options**:
   - 🐍 Run with Python script (`run.py`)
@@ -189,6 +198,42 @@ dotnet run
 - Track stocks, orders, and trades
 - Real-time statistics
 
+### Using ChinPak Tools for DSE (NEW)
+
+```bash
+cd ChinPakTools.DSE
+dotnet run
+
+# Interactive CLI menu offers:
+# 1. Decode FIX messages
+# 2. Analyze session logs
+# 3. View FIX field dictionary
+# 4. View message types
+# 5. Search fields
+# 6. Execute FIX/FAST/ITCH operations
+# 7. Launch GUI interface
+```
+
+**Run GUI Interface:**
+```bash
+cd ChinPakTools.DSE
+dotnet run -- --gui
+
+# Or from CLI menu, select option 7
+```
+
+**Features:**
+- Universal runner/executor for FIX, FAST, and ITCH protocols
+- Interactive CLI and Terminal GUI interfaces
+- Decode FIX 4.4 messages with human-readable field names
+- Analyze session logs with statistics and insights
+- Browse FIX data dictionary (60+ fields and message types)
+- Search fields by keyword or lookup by tag
+- Execute operations on DSE/CSE servers
+- Visual file browser and real-time output display
+
+See [ChinPakTools.DSE/README.md](ChinPakTools.DSE/README.md) for detailed documentation.
+
 See [FIX_ITCH_README.md](FIX_ITCH_README.md) for detailed documentation on FIX and ITCH implementations.
 
 ## 🚢 Deployment
@@ -260,29 +305,31 @@ fix-fast-tools/
 │   ├── Program.cs           # Main application entry point
 │   ├── FAST_TEMPLATE.xml    # FAST template definition
 │   └── [sample files]       # Sample data files
-├── FixProtocol.DSE/         # FIX Protocol for DSE-BD (NEW)
+├── FixProtocol.DSE/         # FIX Protocol for DSE-BD
 │   ├── FixServer.cs         # FIX server implementation
 │   ├── FixClient.cs         # FIX client implementation
 │   └── Program.cs           # CLI interface
-├── FixProtocol.CSE/         # FIX Protocol for CSE-BD (NEW)
+├── FixProtocol.CSE/         # FIX Protocol for CSE-BD
 │   ├── FixServer.cs         # FIX server implementation
 │   ├── FixClient.cs         # FIX client implementation
 │   └── Program.cs           # CLI interface
-├── ItchProtocol.DSE/        # ITCH Consumer for DSE-BD (NEW)
+├── ItchProtocol.DSE/        # ITCH Consumer for DSE-BD
 │   ├── ItchMessages.cs      # ITCH message structures
 │   ├── ItchConsumer.cs      # ITCH message parser
 │   └── Program.cs           # CLI interface
+├── ChinPakTools.DSE/        # Universal FIX/FAST/ITCH Tools for DSE (NEW)
+│   ├── FixMessageDecoder.cs # FIX message decoder
+│   ├── SessionLogAnalyzer.cs # Session log analyzer
+│   ├── FixDictionaryViewer.cs # FIX dictionary viewer
+│   ├── Program.cs           # Interactive CLI
+│   ├── ProgramGUI.cs        # Terminal GUI application
+│   └── README.md            # Tool documentation
 ├── run.py                   # Python runner script
 ├── deploy.sh               # Deployment script
-├── FIX_ITCH_README.md      # FIX/ITCH documentation (NEW)
+├── FIX_ITCH_README.md      # FIX/ITCH documentation
 ├── LICENSE                  # MIT License
 └── README.md               # This file
 ```
-├── FastTools.Web/           # Web API and UI
-│   ├── Controllers/         # API controllers
-│   └── wwwroot/            # Web UI (HTML/CSS/JS)
-├── Tools/                   # Original console application
-│   ├── Program.cs           # Main application entry point
 │   ├── FAST_TEMPLATE.xml    # FAST template definition
 │   └── [sample files]       # Sample data files
 ├── run.py                   # Python runner script
