@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- QuickFIXn packages provide FIX protocol implementation for message parsing and field definitions -->
     <PackageReference Include="QuickFIXn.Core" Version="1.14.0" />
     <PackageReference Include="QuickFIXn.FIX4.4" Version="1.13.0" />
     <PackageReference Include="Terminal.Gui" Version="1.17.1" />

@@ -330,13 +330,6 @@ fix-fast-tools/
 ├── LICENSE                  # MIT License
 └── README.md               # This file
 ```
-│   ├── FAST_TEMPLATE.xml    # FAST template definition
-│   └── [sample files]       # Sample data files
-├── run.py                   # Python runner script
-├── deploy.sh               # Deployment script
-├── LICENSE                  # MIT License
-└── README.md               # This file
-```
 
 ## 📋 Sample Files
 
