@@ -141,7 +141,8 @@ namespace ChinPakTools.DSE
                 Console.WriteLine($"\n⚠️  ERRORS: {stats.ErrorCount:N0}");
                 foreach (var error in stats.ErrorMessages.Take(5))
                 {
-                    Console.WriteLine($"  • {error.Substring(0, Math.Min(error.Length, 60))}...");
+                    var displayError = error.Length > 60 ? error.Substring(0, 60) + "..." : error;
+                    Console.WriteLine($"  • {displayError}");
                 }
                 if (stats.ErrorMessages.Count > 5)
                     Console.WriteLine($"  ... and {stats.ErrorMessages.Count - 5} more errors");
