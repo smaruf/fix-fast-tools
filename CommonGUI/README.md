@@ -88,6 +88,33 @@ When you launch CommonGUI, you'll see:
 
 ### Menu Options
 
+**Currently Implemented:**
+
+#### File Menu
+- **Open Log** - Browse and open session log files ✓
+- **Save Output** - Save the current output to a file ✓
+- **Quit** - Exit the application ✓
+
+#### Tools Menu
+- **FIX Decoder** - Decode FIX messages ✓
+- **Log Analyzer** - Analyze session logs ✓
+- **Dictionary** - View FIX dictionary ✓
+
+**Planned Features:**
+
+#### Tools Menu (Coming Soon)
+- **FAST Decoder** - Decode FAST messages (Base64/Hex)
+- **ITCH Parser** - Parse ITCH market data
+
+#### Server Menu (Coming Soon)
+- **FIX Server (DSE)** - Start FIX server for DSE-BD
+- **FIX Server (CSE)** - Start FIX server for CSE-BD
+- **FAST Server** - Start FAST protocol server
+- **ITCH Server** - Start ITCH market data server
+- **Stop All** - Stop all running servers
+
+### Detailed Menu Options
+
 #### File Menu
 - **Open Log** - Browse and open session log files
 - **Save Output** - Save the current output to a file
@@ -149,17 +176,23 @@ Uses components from:
 
 ## 📊 Supported Operations
 
-### FIX Protocol
-- Decode FIX messages
-- Analyze session logs
-- Browse FIX dictionary
+### Currently Implemented
+
+#### FIX Protocol
+- ✓ Decode FIX messages
+- ✓ Analyze session logs
+- ✓ Browse FIX dictionary
+
+### Planned Features
+
+#### FIX Protocol (Coming Soon)
 - Start/stop FIX servers (DSE, CSE)
 
-### FAST Protocol
+#### FAST Protocol (Coming Soon)
 - Decode FAST messages (Base64/Hex)
 - Start/stop FAST servers
 
-### ITCH Protocol
+#### ITCH Protocol (Coming Soon)
 - Parse ITCH market data
 - Start/stop ITCH servers
 
@@ -190,7 +223,9 @@ The interface uses Terminal.Gui providing:
 - File browsing
 - Color schemes
 
-## 🔐 Exchange Support
+## 🔐 Exchange Support (Planned)
+
+The following exchange integrations are planned for future releases:
 
 ### DSE-BD (Dhaka Stock Exchange)
 - FIX 4.4 protocol
@@ -201,6 +236,8 @@ The interface uses Terminal.Gui providing:
 - FIX 4.4 protocol
 - Default port: 5002
 - Session: FIX.4.4-CSE-BD-CLIENT
+
+**Note:** Server functionality requires integration with FixProtocol.DSE/CSE modules.
 
 ## 📝 Example Workflows
 

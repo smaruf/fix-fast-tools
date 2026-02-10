@@ -14,7 +14,7 @@ namespace ChinPakFIXFastTools
             var stats = new SessionLogStats
             {
                 FilePath = logFilePath,
-                AnalysisTime = DateTime.Now
+                AnalysisTime = DateTime.UtcNow
             };
 
             var lines = File.ReadAllLines(logFilePath);

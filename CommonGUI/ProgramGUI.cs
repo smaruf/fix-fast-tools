@@ -25,7 +25,7 @@ namespace CommonGUI
                 var top = Application.Top;
                 
                 // Main window
-                mainWindow = new Window("ChinPak Universal FIX/FAST/ITCH Runner - DSE Edition")
+                mainWindow = new Window("ChinPak Universal FIX/FAST/ITCH Runner")
                 {
                     X = 0,
                     Y = 0,
@@ -164,7 +164,7 @@ namespace CommonGUI
         private static string GetWelcomeMessage()
         {
             return @"╔══════════════════════════════════════════════════════════════╗
-║     ChinPak Universal FIX/FAST/ITCH Runner - DSE Edition     ║
+║         ChinPak Universal FIX/FAST/ITCH Runner               ║
 ╚══════════════════════════════════════════════════════════════╝
 
 Welcome to the universal message protocol runner!
