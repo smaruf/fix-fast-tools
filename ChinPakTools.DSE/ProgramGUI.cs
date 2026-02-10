@@ -34,7 +34,7 @@ namespace ChinPakTools.DSE
                     {
                         new MenuItem("_Open Log", "", () => OpenLogFile()),
                         new MenuItem("_Save Output", "", () => SaveOutput()),
-                        null!,
+                        null!, // Separator
                         new MenuItem("_Quit", "", () => { Application.RequestStop(); })
                     }),
                     new MenuBarItem("_Tools", new MenuItem[]
@@ -42,7 +42,7 @@ namespace ChinPakTools.DSE
                         new MenuItem("_FIX Decoder", "", () => ShowFixDecoder()),
                         new MenuItem("_FAST Decoder", "", () => ShowFastDecoder()),
                         new MenuItem("_ITCH Parser", "", () => ShowItchParser()),
-                        null!,
+                        null!, // Separator
                         new MenuItem("_Log Analyzer", "", () => ShowLogAnalyzer()),
                         new MenuItem("_Dictionary", "", () => ShowDictionary())
                     }),
@@ -52,7 +52,7 @@ namespace ChinPakTools.DSE
                         new MenuItem("_FIX Server (CSE)", "", () => StartFixServer("CSE")),
                         new MenuItem("_FAST Server", "", () => StartFastServer()),
                         new MenuItem("_ITCH Server", "", () => StartItchServer()),
-                        null!,
+                        null!, // Separator
                         new MenuItem("_Stop All", "", () => StopAllServers())
                     }),
                     new MenuBarItem("_Help", new MenuItem[]
