@@ -1,12 +1,5 @@
 using System;
-using ChinPakTools.DSE;
-
-// Check for GUI mode
-if (args.Length > 0 && (args[0] == "--gui" || args[0] == "-g"))
-{
-    ProgramGUI.Run(args);
-    return;
-}
+using ChinPakFIXFastTools;
 
 Console.WriteLine("╔══════════════════════════════════════════════╗");
 Console.WriteLine("║       ChinPak FIX Tools for DSE-BD          ║");
@@ -47,8 +40,8 @@ while (running)
             break;
             
         case "4":
-            Console.WriteLine("\n🚀 Launching GUI Interface...");
-            ProgramGUI.Run(Array.Empty<string>());
+            Console.WriteLine("\n🚀 GUI Interface is now available in CommonGUI project");
+            Console.WriteLine("   Run: cd CommonGUI && dotnet run");
             break;
             
         case "5":

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace ChinPakTools.DSE
+namespace ChinPakFIXFastTools
 {
     public class FixMessageDecoder
     {

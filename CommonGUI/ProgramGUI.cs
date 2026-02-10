@@ -1,7 +1,8 @@
 using Terminal.Gui;
 using NStack;
+using ChinPakFIXFastTools;
 
-namespace ChinPakTools.DSE
+namespace CommonGUI
 {
     public class ProgramGUI
     {
@@ -9,6 +10,11 @@ namespace ChinPakTools.DSE
         private static TextView? outputView;
         private static TextField? inputField;
         private static Label? statusLabel;
+        
+        public static void Main(string[] args)
+        {
+            Run(args);
+        }
         
         public static void Run(string[] args)
         {

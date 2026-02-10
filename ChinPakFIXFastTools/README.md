@@ -1,14 +1,13 @@
-# ChinPak Tools - DSE Edition
+# ChinPak FIX/FAST Tools
 
-A comprehensive toolkit for analyzing and processing FIX/FAST/ITCH messages for the Dhaka Stock Exchange (DSE-BD) and other Bangladesh stock exchanges.
+A comprehensive toolkit for analyzing and processing FIX/FAST messages for the Dhaka Stock Exchange (DSE-BD) and other Bangladesh stock exchanges.
 
 ## 🎯 Overview
 
-ChinPak Tools provides a universal interface for working with multiple financial message protocols used in Bangladesh stock exchanges:
+ChinPak FIX/FAST Tools provides a CLI interface for working with financial message protocols used in Bangladesh stock exchanges:
 
 - **FIX Protocol** - Financial Information eXchange (FIX 4.4) for trading
 - **FAST Protocol** - FIX Adapted for STreaming for high-speed data
-- **ITCH Protocol** - NASDAQ ITCH 5.0 for market data
 
 ## ✨ Features
 
@@ -32,12 +31,16 @@ ChinPak Tools provides a universal interface for working with multiple financial
 - Search functionality
 - Type and description information
 
-### 4. Universal GUI Runner
-- Terminal-based graphical interface using Terminal.Gui
-- Unified interface for FIX, FAST, and ITCH operations
-- Interactive menus and dialogs
-- Real-time output display
-- Quick action buttons
+### 4. GUI Interface
+
+For a graphical user interface, use the separate **CommonGUI** project:
+
+```bash
+cd ../CommonGUI
+dotnet run
+```
+
+The CommonGUI provides a unified interface for all stock exchanges and protocols.
 
 ## 🚀 Quick Start
 
@@ -49,7 +52,7 @@ ChinPak Tools provides a universal interface for working with multiple financial
 ### Building
 
 ```bash
-cd ChinPakTools.DSE
+cd ChinPakFIXFastTools
 dotnet restore
 dotnet build
 ```
@@ -61,14 +64,10 @@ dotnet build
 dotnet run
 ```
 
-#### GUI Version (Terminal UI)
+#### GUI Version
+For GUI interface, use the CommonGUI project:
 ```bash
-dotnet run --project ChinPakTools.DSE -- --gui
-```
-
-Or directly run ProgramGUI:
-```bash
-# Update ChinPakTools.DSE.csproj to set ProgramGUI as startup
+cd ../CommonGUI
 dotnet run
 ```
 
@@ -256,10 +255,11 @@ dotnet run
 # Select: 4. List All Messages
 ```
 
-### Scenario 4: Universal Runner (GUI)
+### Scenario 4: GUI Interface
 ```bash
 # Start GUI for all protocols
-dotnet run --gui
+cd ../CommonGUI
+dotnet run
 # Use menu: Tools → FIX Decoder
 # Use menu: Tools → Log Analyzer
 # Use menu: Server → FIX Server (DSE)
@@ -268,25 +268,27 @@ dotnet run --gui
 ## 🏗️ Architecture
 
 ```
-ChinPakTools.DSE/
+ChinPakFIXFastTools/
 ├── FixMessageDecoder.cs      - FIX message parser
 ├── SessionLogAnalyzer.cs     - Log analysis engine
 ├── FixDictionaryViewer.cs    - FIX dictionary
 ├── Program.cs                - CLI interface
-├── ProgramGUI.cs             - GUI interface
-├── ChinPakTools.DSE.csproj   - Project file
+├── ChinPakFIXFastTools.csproj - Project file
 └── README.md                 - Documentation
+
+CommonGUI/                     - Separate GUI project
+├── ProgramGUI.cs             - GUI interface for all exchanges
+├── CommonGUI.csproj          - GUI project file
+└── README.md                 - GUI documentation
 ```
 
-## 🎨 Terminal.Gui Features
+## 🎨 GUI Interface
 
-The GUI version uses Terminal.Gui for:
+For a graphical terminal interface, see the **CommonGUI** project which provides:
 - Cross-platform terminal UI
-- Keyboard navigation
-- Mouse support
-- Dialogs and menus
-- Text editing
-- File browsing
+- Unified interface for all stock exchanges
+- Support for FIX, FAST, and ITCH protocols
+- Interactive menus and dialogs
 
 ## 🔐 Exchange Support
 
@@ -308,6 +310,7 @@ The GUI version uses Terminal.Gui for:
 
 ## 🤝 Related Projects
 
+- **CommonGUI** - Universal GUI for all stock exchanges
 - **FixProtocol.DSE** - FIX client/server for DSE-BD
 - **FixProtocol.CSE** - FIX client/server for CSE-BD
 - **FastTools.Core** - FAST message decoder
@@ -329,4 +332,4 @@ Built for the Bangladesh stock exchange community to facilitate:
 
 ---
 
-**ChinPak Tools - Your Universal FIX/FAST/ITCH Toolkit for Bangladesh Exchanges**
+**ChinPak FIX/FAST Tools - CLI Toolkit for Bangladesh Exchanges**
