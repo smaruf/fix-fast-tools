@@ -839,7 +839,7 @@ Features planned:
         {
             if (tradingSession == null || !tradingSession.IsConnected)
             {
-                MessageBox.ErrorQuery("Info", "No active session to disconnect", "OK");
+                MessageBox.Query("Session Logout", "No active session to disconnect", "OK");
                 return;
             }
             

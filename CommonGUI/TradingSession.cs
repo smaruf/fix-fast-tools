@@ -97,9 +97,8 @@ namespace CommonGUI
                 }
 
                 _initiator.Start();
-                _isConnected = true;
-                OnStatusChanged?.Invoke($"Connected to {exchange}");
-                OnLogMessage?.Invoke($"Successfully connected to {exchange}");
+                OnStatusChanged?.Invoke("Connecting...");
+                OnLogMessage?.Invoke($"Initiating connection to {exchange}...");
                 
                 return true;
             }
@@ -233,9 +232,9 @@ namespace CommonGUI
                         _session.AddExecutionReport(report);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // Ignore parsing errors
+                    _session.OnLogMessage?.Invoke($"Error parsing message: {ex.Message}");
                 }
             }
 
@@ -297,9 +296,9 @@ namespace CommonGUI
                     if (message.IsSetField(32)) report.LastQty = message.GetDecimal(32);
                     if (message.IsSetField(58)) report.Text = message.GetString(58);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // Use defaults for any missing fields
+                    _session.OnLogMessage?.Invoke($"Error parsing execution report field: {ex.Message}");
                 }
 
                 return report;
