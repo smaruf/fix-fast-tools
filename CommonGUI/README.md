@@ -113,31 +113,6 @@ When you launch CommonGUI, you'll see:
 - **ITCH Server** - Start ITCH market data server
 - **Stop All** - Stop all running servers
 
-### Detailed Menu Options
-
-#### File Menu
-- **Open Log** - Browse and open session log files
-- **Save Output** - Save the current output to a file
-- **Quit** - Exit the application
-
-#### Tools Menu
-- **FIX Decoder** - Decode FIX messages
-- **FAST Decoder** - Decode FAST messages (Base64/Hex)
-- **ITCH Parser** - Parse ITCH market data
-- **Log Analyzer** - Analyze session logs
-- **Dictionary** - View FIX dictionary
-
-#### Server Menu
-- **FIX Server (DSE)** - Start FIX server for DSE-BD
-- **FIX Server (CSE)** - Start FIX server for CSE-BD
-- **FAST Server** - Start FAST protocol server
-- **ITCH Server** - Start ITCH market data server
-- **Stop All** - Stop all running servers
-
-#### Help Menu
-- **About** - Application information
-- **Documentation** - Quick guide
-
 ### Command Input
 
 You can type commands directly in the input field:
@@ -151,10 +126,10 @@ analyze ./logs/session.log
 
 Use the quick action buttons for common tasks:
 
-1. **FIX Decode** - Opens dialog to decode FIX messages
-2. **FAST Decode** - Opens dialog to decode FAST messages
-3. **ITCH Parse** - Parse ITCH market data
-4. **Log Analyze** - Opens dialog to analyze log files
+1. **FIX Decode** - Opens dialog to decode FIX messages ✓
+2. **FAST Decode** - Opens dialog to decode FAST messages (Coming Soon)
+3. **ITCH Parse** - Parse ITCH market data (Coming Soon)
+4. **Log Analyze** - Opens dialog to analyze log files ✓
 
 ## 🔧 Components
 
@@ -257,10 +232,10 @@ The following exchange integrations are planned for future releases:
 2. View message types and field definitions
 3. Use input commands for specific lookups
 
-### Workflow 4: Start FIX Server
+### Workflow 4: Start FIX Server (Planned Feature)
 1. Use menu: **Server → FIX Server (DSE)**
-2. Server starts for DSE-BD exchange
-3. View status in status bar
+2. Currently shows "Not Implemented" message
+3. Requires integration with FixProtocol.DSE/CSE modules
 
 ## 🤝 Related Projects
 

@@ -170,7 +170,7 @@ static void ShowAbout()
     Console.WriteLine("║                                                           ║");
     Console.WriteLine("║  Tools:                                                   ║");
     Console.WriteLine("║    • CLI Interface (current)                              ║");
-    Console.WriteLine("║    • GUI Interface (use ProgramGUI)                       ║");
+    Console.WriteLine("║    • GUI Interface (use CommonGUI project)                ║");
     Console.WriteLine("║                                                           ║");
     Console.WriteLine("║  License:     MIT                                         ║");
     Console.WriteLine("╚═══════════════════════════════════════════════════════════╝");

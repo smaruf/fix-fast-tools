@@ -252,7 +252,7 @@ Status: Ready
             var input = new TextField("") { X = 1, Y = 2, Width = Dim.Fill() - 2 };
             
             var formatLabel = new Label("Format:") { X = 1, Y = 3 };
-            var radioBase64 = new RadioGroup(new NStack.ustring[] { "Base64", "Hex" }) { X = 10, Y = 3 };
+            var formatRadioGroup = new RadioGroup(new NStack.ustring[] { "Base64", "Hex" }) { X = 10, Y = 3 };
             
             var btnDecode = new Button("Decode") { X = 1, Y = 5 };
             btnDecode.Clicked += () =>
@@ -261,14 +261,14 @@ Status: Ready
                 if (!string.IsNullOrWhiteSpace(msg))
                 {
                     Application.RequestStop();
-                    DecodeFastMessage(msg, radioBase64.SelectedItem == 0);
+                    DecodeFastMessage(msg, formatRadioGroup.SelectedItem == 0);
                 }
             };
             
             var btnCancel = new Button("Cancel") { X = 12, Y = 5 };
             btnCancel.Clicked += () => Application.RequestStop();
             
-            dialog.Add(label, input, formatLabel, radioBase64, btnDecode, btnCancel);
+            dialog.Add(label, input, formatLabel, formatRadioGroup, btnDecode, btnCancel);
             Application.Run(dialog);
         }
         
