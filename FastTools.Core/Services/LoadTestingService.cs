@@ -160,7 +160,7 @@ namespace FastTools.Core.Services
         private string DetermineMessageType(int index)
         {
             var distribution = _config.Scenario.Distribution;
-            var random = new Random(index);
+            var random = Random.Shared; // Use shared Random for thread-safety
             var value = random.Next(100);
 
             if (value < distribution.NewOrderPercent)

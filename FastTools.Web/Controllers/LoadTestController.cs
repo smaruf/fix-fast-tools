@@ -43,7 +43,7 @@ namespace FastTools.Web.Controllers
                         {
                             // Simulate message sending with random success/failure
                             await Task.Delay(10);
-                            return new Random().Next(100) > 5; // 95% success rate
+                            return Random.Shared.Next(100) > 5; // 95% success rate, thread-safe
                         });
                     }
                     catch (Exception ex)
