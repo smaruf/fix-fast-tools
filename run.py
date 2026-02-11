@@ -93,6 +93,36 @@ def run_original_tools(args):
     
     subprocess.run(cmd)
 
+def run_chinpak_tools(args):
+    """Run ChinPakFIXFastTools"""
+    print("Starting ChinPakFIXFastTools...")
+    chinpak_project = os.path.join('ChinPakFIXFastTools', 'ChinPakFIXFastTools.csproj')
+    
+    if not os.path.exists(chinpak_project):
+        print(f"Error: ChinPakFIXFastTools project not found at {chinpak_project}")
+        sys.exit(1)
+    
+    build_project(chinpak_project)
+    
+    # Check if GUI mode is requested
+    if args.gui:
+        # Run CommonGUI instead
+        run_commongui(args)
+    else:
+        subprocess.run(['dotnet', 'run', '--project', chinpak_project])
+
+def run_commongui(args):
+    """Run CommonGUI"""
+    print("Starting CommonGUI...")
+    gui_project = os.path.join('CommonGUI', 'CommonGUI.csproj')
+    
+    if not os.path.exists(gui_project):
+        print(f"Error: CommonGUI project not found at {gui_project}")
+        sys.exit(1)
+    
+    build_project(gui_project)
+    subprocess.run(['dotnet', 'run', '--project', gui_project])
+
 def show_info():
     """Show system and project information"""
     print("FAST Tools - System Information")
@@ -114,6 +144,8 @@ def show_info():
         ('FastTools.CLI', 'Enhanced CLI tool with interactive mode'),
         ('FastTools.Web', 'Web API and UI for FAST message decoding'),
         ('Tools', 'Original console application'),
+        ('ChinPakFIXFastTools', 'Universal FIX/FAST/ITCH tools with CLI'),
+        ('CommonGUI', 'Universal GUI for all stock exchanges'),
     ]
     
     for name, desc in projects:
@@ -134,6 +166,9 @@ Examples:
   %(prog)s --web                    # Start web server on port 5000
   %(prog)s --web --port 8080        # Start web server on custom port
   %(prog)s --tools                  # Run original console tool
+  %(prog)s --chinpak                # Run ChinPakFIXFastTools (CLI mode)
+  %(prog)s --chinpak --gui          # Run CommonGUI
+  %(prog)s --commongui              # Run CommonGUI directly
   %(prog)s --info                   # Show system information
         '''
     )
@@ -144,6 +179,12 @@ Examples:
                         help='Run the web interface')
     parser.add_argument('--tools', action='store_true',
                         help='Run the original console tool')
+    parser.add_argument('--chinpak', action='store_true',
+                        help='Run ChinPakFIXFastTools (CLI mode)')
+    parser.add_argument('--gui', action='store_true',
+                        help='Run CommonGUI (use with --chinpak for GUI mode)')
+    parser.add_argument('--commongui', action='store_true',
+                        help='Run CommonGUI directly')
     parser.add_argument('--port', type=int,
                         help='Port for web server (default: 5000)')
     parser.add_argument('--info', action='store_true',
@@ -170,6 +211,10 @@ Examples:
         run_web(args)
     elif args.tools:
         run_original_tools(args)
+    elif args.chinpak:
+        run_chinpak_tools(args)
+    elif args.commongui:
+        run_commongui(args)
     else:
         # Default: show help and info
         parser.print_help()

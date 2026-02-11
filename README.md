@@ -14,6 +14,8 @@ A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (
   - 📦 **Original Console Tool** - Classic command-line utility
   - 🔧 **FIX Protocol Client/Server** - For DSE-BD and CSE-BD trading
   - 📊 **ITCH Market Data Consumer** - For DSE-BD market data analysis
+  - 🎯 **ChinPakFIXFastTools** - Universal FIX/FAST/ITCH tools with CLI
+  - 🖼️ **CommonGUI** - Universal graphical interface for all stock exchanges
 
 - **Message Decoding**:
   - Decode FAST-encoded binary messages
@@ -33,6 +35,20 @@ A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (
   - Market data consumption and analysis
   - Order book reconstruction
   - Real-time statistics tracking
+
+- **ChinPakFIXFastTools** (NEW):
+  - Universal CLI tools for FIX, FAST, and ITCH messages
+  - FIX message decoder with human-readable output
+  - Session log analyzer with comprehensive statistics
+  - FIX field dictionary viewer and search
+  - Integration with all DSE/CSE protocol tools
+
+- **CommonGUI** (NEW):
+  - Universal graphical interface for all stock exchanges
+  - Terminal.Gui based visual interface
+  - Supports DSE, CSE, and other exchange operations
+  - Menu-driven workflow with real-time output
+  - File browser and server management
 
 - **Deployment Options**:
   - 🐍 Run with Python script (`run.py`)
@@ -189,6 +205,49 @@ dotnet run
 - Track stocks, orders, and trades
 - Real-time statistics
 
+### Using ChinPakFIXFastTools (NEW)
+
+```bash
+cd ChinPakFIXFastTools
+dotnet run
+
+# Interactive CLI menu offers:
+# 1. Decode FIX messages
+# 2. Analyze session logs
+# 3. View FIX field dictionary
+# 4. Launch Common GUI
+# 5. About
+```
+
+**Features:**
+- FIX message decoder with human-readable field names
+- Session log analyzer with comprehensive statistics
+- Browse FIX data dictionary (60+ fields and message types)
+- Search fields by keyword or lookup by tag
+- Integrated with CommonGUI for visual interface
+
+See [ChinPakFIXFastTools/README.md](ChinPakFIXFastTools/README.md) for detailed documentation.
+
+### Using CommonGUI (NEW)
+
+```bash
+cd CommonGUI
+dotnet run
+
+# Or from ChinPakFIXFastTools CLI menu, select option 4
+```
+
+**Features:**
+- Universal graphical interface for all stock exchanges (DSE, CSE, etc.)
+- Terminal.Gui based visual interface
+- Menu-driven workflow (File, Tools, Servers, Help)
+- FIX/FAST/ITCH message decoding and operations
+- Server management for DSE/CSE FIX, FAST, and ITCH
+- Real-time output display and file operations
+- Visual file browser
+
+See [CommonGUI/README.md](CommonGUI/README.md) for detailed documentation.
+
 See [FIX_ITCH_README.md](FIX_ITCH_README.md) for detailed documentation on FIX and ITCH implementations.
 
 ## 🚢 Deployment
@@ -260,33 +319,31 @@ fix-fast-tools/
 │   ├── Program.cs           # Main application entry point
 │   ├── FAST_TEMPLATE.xml    # FAST template definition
 │   └── [sample files]       # Sample data files
-├── FixProtocol.DSE/         # FIX Protocol for DSE-BD (NEW)
+├── FixProtocol.DSE/         # FIX Protocol for DSE-BD
 │   ├── FixServer.cs         # FIX server implementation
 │   ├── FixClient.cs         # FIX client implementation
 │   └── Program.cs           # CLI interface
-├── FixProtocol.CSE/         # FIX Protocol for CSE-BD (NEW)
+├── FixProtocol.CSE/         # FIX Protocol for CSE-BD
 │   ├── FixServer.cs         # FIX server implementation
 │   ├── FixClient.cs         # FIX client implementation
 │   └── Program.cs           # CLI interface
-├── ItchProtocol.DSE/        # ITCH Consumer for DSE-BD (NEW)
+├── ItchProtocol.DSE/        # ITCH Consumer for DSE-BD
 │   ├── ItchMessages.cs      # ITCH message structures
 │   ├── ItchConsumer.cs      # ITCH message parser
 │   └── Program.cs           # CLI interface
+├── ChinPakFIXFastTools/     # Universal FIX/FAST/ITCH Tools (NEW)
+│   ├── FixMessageDecoder.cs # FIX message decoder
+│   ├── SessionLogAnalyzer.cs # Session log analyzer
+│   ├── FixDictionaryViewer.cs # FIX dictionary viewer
+│   ├── Program.cs           # Interactive CLI
+│   └── README.md            # Tool documentation
+├── CommonGUI/               # Universal GUI for all stock exchanges (NEW)
+│   ├── ProgramGUI.cs        # Terminal.Gui application
+│   ├── CommonGUI.csproj     # Project file
+│   └── README.md            # GUI documentation
 ├── run.py                   # Python runner script
 ├── deploy.sh               # Deployment script
-├── FIX_ITCH_README.md      # FIX/ITCH documentation (NEW)
-├── LICENSE                  # MIT License
-└── README.md               # This file
-```
-├── FastTools.Web/           # Web API and UI
-│   ├── Controllers/         # API controllers
-│   └── wwwroot/            # Web UI (HTML/CSS/JS)
-├── Tools/                   # Original console application
-│   ├── Program.cs           # Main application entry point
-│   ├── FAST_TEMPLATE.xml    # FAST template definition
-│   └── [sample files]       # Sample data files
-├── run.py                   # Python runner script
-├── deploy.sh               # Deployment script
+├── FIX_ITCH_README.md      # FIX/ITCH documentation
 ├── LICENSE                  # MIT License
 └── README.md               # This file
 ```
