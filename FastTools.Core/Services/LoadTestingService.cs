@@ -11,6 +11,7 @@ namespace FastTools.Core.Services
         private bool _isRunning;
 
         public bool IsRunning => _isRunning;
+        public LoadTestMetrics Metrics => _metrics;
 
         public LoadTestingService(LoadTestConfig config)
         {

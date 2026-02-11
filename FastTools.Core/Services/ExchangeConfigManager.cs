@@ -4,7 +4,7 @@ using FastTools.Core.Models;
 
 namespace FastTools.Core.Services
 {
-    public class ConfigurationManager
+    public class ExchangeConfigManager
     {
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
