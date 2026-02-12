@@ -162,7 +162,7 @@ Example metrics output:
 
 2. **Market Data Consumption** (`market-data-001`)
    - Category: Basic
-   - Process real-time ITCH market data
+   - Process real-time market data via ITCH or FAST protocol
 
 3. **FIX Session Management** (`session-mgmt-001`)
    - Category: Intermediate

@@ -74,6 +74,27 @@
       }
     },
     {
+      "Name": "DSE Market Data (FAST)",
+      "Code": "DSE-FAST",
+      "Country": "Bangladesh",
+      "Description": "DSE-BD Market Data via FAST Protocol",
+      "IsEnabled": true,
+      "Protocol": {
+        "Type": "FAST",
+        "Version": "1.1",
+        "Connection": {
+          "Host": "localhost",
+          "Port": 6002,
+          "UseSsl": false,
+          "TimeoutSeconds": 30
+        },
+        "CustomSettings": {
+          "TemplateFile": "FAST_TEMPLATE.xml",
+          "ResetOnEveryMessage": "false"
+        }
+      }
+    },
+    {
       "Name": "Sample Test Exchange",
       "Code": "TEST",
       "Country": "Global",

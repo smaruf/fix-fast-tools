@@ -214,6 +214,31 @@ namespace FastTools.Core.Services
                     },
                     new ExchangeConfig
                     {
+                        Name = "DSE Market Data (FAST)",
+                        Code = "DSE-FAST",
+                        Country = "Bangladesh",
+                        Description = "DSE-BD Market Data via FAST Protocol",
+                        IsEnabled = true,
+                        Protocol = new ExchangeProtocolConfig
+                        {
+                            Type = "FAST",
+                            Version = "1.1",
+                            Connection = new ConnectionConfig
+                            {
+                                Host = "localhost",
+                                Port = 6002,
+                                UseSsl = false,
+                                TimeoutSeconds = 30
+                            },
+                            CustomSettings = new Dictionary<string, string>
+                            {
+                                { "TemplateFile", "FAST_TEMPLATE.xml" },
+                                { "ResetOnEveryMessage", "false" }
+                            }
+                        }
+                    },
+                    new ExchangeConfig
+                    {
                         Name = "Sample Test Exchange",
                         Code = "TEST",
                         Country = "Global",

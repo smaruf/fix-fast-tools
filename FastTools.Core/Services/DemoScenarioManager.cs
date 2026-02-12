@@ -112,7 +112,7 @@ namespace FastTools.Core.Services
             {
                 Id = "market-data-001",
                 Name = "Market Data Consumption",
-                Description = "Learn how to receive and process real-time market data via ITCH protocol",
+                Description = "Learn how to receive and process real-time market data via ITCH or FAST protocol",
                 Category = "Basic",
                 Type = DemoScenarioType.MarketData,
                 ExchangeCode = "DSE-ITCH",
@@ -121,14 +121,15 @@ namespace FastTools.Core.Services
                     new DemoStep
                     {
                         Order = 1,
-                        Title = "Start ITCH Consumer",
-                        Description = "Initialize ITCH market data consumer",
-                        Action = "START_ITCH",
+                        Title = "Start Market Data Consumer",
+                        Description = "Initialize market data consumer (ITCH or FAST)",
+                        Action = "START_MARKET_DATA",
                         Parameters = new Dictionary<string, object>
                         {
-                            { "exchangeCode", "DSE-ITCH" }
+                            { "exchangeCode", "DSE-ITCH" },
+                            { "protocol", "ITCH" }
                         },
-                        ExpectedResult = "ITCH consumer started successfully",
+                        ExpectedResult = "Market data consumer started successfully",
                         AutoExecute = true,
                         DelayMs = 1000
                     },
@@ -136,7 +137,7 @@ namespace FastTools.Core.Services
                     {
                         Order = 2,
                         Title = "Process Sample Messages",
-                        Description = "Process 10 sample ITCH messages",
+                        Description = "Process 10 sample messages (ITCH or FAST format)",
                         Action = "PROCESS_SAMPLE",
                         Parameters = new Dictionary<string, object>
                         {

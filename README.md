@@ -320,6 +320,7 @@ curl -X POST http://localhost:5000/api/ExchangeConfig/import \
 - **DSE** - Dhaka Stock Exchange (FIX 4.4, port 5001)
 - **CSE** - Chittagong Stock Exchange (FIX 4.4, port 5002)
 - **DSE-ITCH** - DSE Market Data (ITCH 5.0, port 6001)
+- **DSE-FAST** - DSE Market Data (FAST 1.1, port 6002)
 - **TEST** - Sample Test Exchange (FIX 4.4, port 5999)
 
 Configuration files are located in `configs/exchanges.json`.
@@ -369,7 +370,7 @@ curl -X POST http://localhost:5000/api/DemoScenario/basic-order-001/execute
 
 **Available Scenarios:**
 1. **Basic Order Placement** - Simple buy/sell orders
-2. **Market Data Consumption** - ITCH protocol usage
+2. **Market Data Consumption** - ITCH or FAST protocol usage
 3. **FIX Session Management** - Logon/logout/heartbeats
 4. **Order Cancel and Replace** - Modify existing orders
 5. **Error Handling** - Recovery from failures
