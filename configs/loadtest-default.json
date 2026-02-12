@@ -1,0 +1,18 @@
+{
+  "Name": "Default Load Test",
+  "Description": "Standard load test with moderate throughput",
+  "ExchangeCode": "DSE",
+  "Scenario": {
+    "DurationSeconds": 60,
+    "MessagesPerSecond": 10,
+    "TotalMessages": 600,
+    "RampUp": true,
+    "RampUpSeconds": 10,
+    "Distribution": {
+      "NewOrderPercent": 60,
+      "CancelPercent": 20,
+      "ReplacePercent": 15,
+      "StatusPercent": 5
+    }
+  }
+}

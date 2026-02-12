@@ -1,0 +1,123 @@
+{
+  "Version": "1.0",
+  "LastModified": "2026-02-11T00:00:00Z",
+  "Exchanges": [
+    {
+      "Name": "Dhaka Stock Exchange",
+      "Code": "DSE",
+      "Country": "Bangladesh",
+      "Description": "DSE-BD - Dhaka Stock Exchange, Bangladesh",
+      "IsEnabled": true,
+      "Protocol": {
+        "Type": "FIX",
+        "Version": "4.4",
+        "Connection": {
+          "Host": "localhost",
+          "Port": 5001,
+          "UseSsl": false,
+          "TimeoutSeconds": 30,
+          "HeartbeatIntervalSeconds": 30
+        },
+        "Session": {
+          "SenderCompId": "CLIENT1",
+          "TargetCompId": "DSE-BD",
+          "FileStorePath": "./data/dse",
+          "FileLogPath": "./logs/dse",
+          "UseDataDictionary": false
+        }
+      }
+    },
+    {
+      "Name": "Chittagong Stock Exchange",
+      "Code": "CSE",
+      "Country": "Bangladesh",
+      "Description": "CSE-BD - Chittagong Stock Exchange, Bangladesh",
+      "IsEnabled": true,
+      "Protocol": {
+        "Type": "FIX",
+        "Version": "4.4",
+        "Connection": {
+          "Host": "localhost",
+          "Port": 5002,
+          "UseSsl": false,
+          "TimeoutSeconds": 30,
+          "HeartbeatIntervalSeconds": 30
+        },
+        "Session": {
+          "SenderCompId": "CLIENT1",
+          "TargetCompId": "CSE-BD",
+          "FileStorePath": "./data/cse",
+          "FileLogPath": "./logs/cse",
+          "UseDataDictionary": false
+        }
+      }
+    },
+    {
+      "Name": "DSE Market Data (ITCH)",
+      "Code": "DSE-ITCH",
+      "Country": "Bangladesh",
+      "Description": "DSE-BD Market Data via NASDAQ ITCH 5.0 Protocol",
+      "IsEnabled": true,
+      "Protocol": {
+        "Type": "ITCH",
+        "Version": "5.0",
+        "Connection": {
+          "Host": "localhost",
+          "Port": 6001,
+          "UseSsl": false,
+          "TimeoutSeconds": 30
+        },
+        "CustomSettings": {
+          "MulticastGroup": "239.0.0.1",
+          "NetworkInterface": "0.0.0.0"
+        }
+      }
+    },
+    {
+      "Name": "DSE Market Data (FAST)",
+      "Code": "DSE-FAST",
+      "Country": "Bangladesh",
+      "Description": "DSE-BD Market Data via FAST Protocol",
+      "IsEnabled": true,
+      "Protocol": {
+        "Type": "FAST",
+        "Version": "1.1",
+        "Connection": {
+          "Host": "localhost",
+          "Port": 6002,
+          "UseSsl": false,
+          "TimeoutSeconds": 30
+        },
+        "CustomSettings": {
+          "TemplateFile": "FAST_TEMPLATE.xml",
+          "ResetOnEveryMessage": "false"
+        }
+      }
+    },
+    {
+      "Name": "Sample Test Exchange",
+      "Code": "TEST",
+      "Country": "Global",
+      "Description": "Sample test exchange for demonstration and learning",
+      "IsEnabled": true,
+      "Protocol": {
+        "Type": "FIX",
+        "Version": "4.4",
+        "Connection": {
+          "Host": "localhost",
+          "Port": 5999,
+          "UseSsl": false,
+          "TimeoutSeconds": 30,
+          "HeartbeatIntervalSeconds": 30
+        },
+        "Session": {
+          "SenderCompId": "TESTCLIENT",
+          "TargetCompId": "TESTSERVER",
+          "FileStorePath": "./data/test",
+          "FileLogPath": "./logs/test",
+          "UseDataDictionary": false
+        }
+      }
+    }
+  ]
+}

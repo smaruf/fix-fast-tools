@@ -1,0 +1,18 @@
+{
+  "Name": "High Throughput Test",
+  "Description": "Stress test with high message rate for performance analysis",
+  "ExchangeCode": "DSE",
+  "Scenario": {
+    "DurationSeconds": 120,
+    "MessagesPerSecond": 100,
+    "TotalMessages": 12000,
+    "RampUp": true,
+    "RampUpSeconds": 20,
+    "Distribution": {
+      "NewOrderPercent": 70,
+      "CancelPercent": 15,
+      "ReplacePercent": 10,
+      "StatusPercent": 5
+    }
+  }
+}

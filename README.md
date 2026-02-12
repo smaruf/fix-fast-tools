@@ -17,33 +17,54 @@ A comprehensive .NET 8.0 application suite for analyzing and decoding FIX/FAST (
   - 🎯 **ChinPakFIXFastTools** - Universal FIX/FAST/ITCH tools with CLI
   - 🖼️ **CommonGUI** - Universal graphical interface for all stock exchanges
 
+- **Configuration & Management** (NEW):
+  - 📋 **Exchange Configuration System** - JSON-based config for multiple exchanges
+  - 🔄 **Config Import/Export** - Share configurations across environments
+  - ✅ **Config Validation** - Automatic validation of exchange settings
+  - 🎛️ **Web API Management** - Full CRUD operations via REST API
+  - 📝 **Default Profiles** - Pre-configured DSE, CSE, and test exchanges
+
+- **Load Testing & Analysis** (NEW):
+  - ⚡ **Performance Testing Framework** - Measure throughput and latency
+  - 📊 **Real-time Metrics** - Track messages/sec, response times, success rates
+  - 📈 **Configurable Scenarios** - Default and high-throughput test profiles
+  - 🎯 **Message Distribution** - Customizable order type distribution
+  - 📉 **Ramp-up Support** - Gradual load increase for realistic testing
+
+- **Demo & Learning** (NEW):
+  - 🎓 **6 Interactive Scenarios** - From basic to advanced trading workflows
+  - 📚 **Educational Content** - Step-by-step guided tutorials
+  - 🔍 **Category Organization** - Basic, Intermediate, Advanced levels
+  - 🎯 **Exchange-specific** - Scenarios for DSE, CSE, ITCH protocols
+  - 📖 **Complete Documentation** - Comprehensive guides and examples
+
 - **Message Decoding**:
   - Decode FAST-encoded binary messages
   - Parse FAST template XML files
   - Analyze message structure and content
   - Support multiple input formats (Base64, Hex, binary files, JSON)
 
-- **FIX Protocol Support** (NEW):
+- **FIX Protocol Support**:
   - FIX 4.4 client and server implementations
   - Session management with proper logon/logout
   - Order processing (New, Cancel, Replace, Status)
   - Comprehensive message logging for analysis
   - Separate implementations for DSE-BD (port 5001) and CSE-BD (port 5002)
 
-- **ITCH Protocol Support** (NEW):
+- **ITCH Protocol Support**:
   - NASDAQ ITCH 5.0 message parsing
   - Market data consumption and analysis
   - Order book reconstruction
   - Real-time statistics tracking
 
-- **ChinPakFIXFastTools** (NEW):
+- **ChinPakFIXFastTools**:
   - Universal CLI tools for FIX, FAST, and ITCH messages
   - FIX message decoder with human-readable output
   - Session log analyzer with comprehensive statistics
   - FIX field dictionary viewer and search
   - Integration with all DSE/CSE protocol tools
 
-- **CommonGUI** (NEW):
+- **CommonGUI**:
   - Universal graphical interface for all stock exchanges
   - Terminal.Gui based visual interface
   - Supports DSE, CSE, and other exchange operations
@@ -132,12 +153,35 @@ dotnet run
 
 Then open your browser to `http://localhost:5000` for the web UI.
 
-**API Endpoints:**
+**API Endpoints - Message Decoding:**
 - `POST /api/FastMessage/decode/base64` - Decode Base64 message
 - `POST /api/FastMessage/decode/hex` - Decode Hex message
 - `POST /api/FastMessage/decode/file` - Decode binary file upload
 - `POST /api/FastMessage/decode/json` - Decode JSON file with multiple messages
 - `GET /api/FastMessage/health` - Health check
+
+**API Endpoints - Exchange Configuration:**
+- `GET /api/ExchangeConfig` - Get all exchange configs
+- `GET /api/ExchangeConfig/{code}` - Get specific exchange
+- `POST /api/ExchangeConfig` - Add new exchange
+- `PUT /api/ExchangeConfig/{code}` - Update exchange
+- `DELETE /api/ExchangeConfig/{code}` - Delete exchange
+- `GET /api/ExchangeConfig/{code}/export` - Export config as JSON
+
+**API Endpoints - Load Testing:**
+- `POST /api/LoadTest/start` - Start a load test
+- `GET /api/LoadTest/{testId}/status` - Get test status
+- `GET /api/LoadTest/{testId}/results` - Get detailed metrics
+- `GET /api/LoadTest/active` - List active tests
+
+**API Endpoints - Demo Scenarios:**
+- `GET /api/DemoScenario` - Get all demo scenarios
+- `GET /api/DemoScenario/{id}` - Get specific scenario
+- `POST /api/DemoScenario/{id}/execute` - Execute scenario
+- `GET /api/DemoScenario/categories` - Get all categories
+- `GET /api/DemoScenario/summary` - Get summary statistics
+
+See [CONFIG_LOADTEST_DEMO_GUIDE.md](CONFIG_LOADTEST_DEMO_GUIDE.md) for detailed API documentation.
 
 ### Using Original Console Tool
 
@@ -249,6 +293,90 @@ dotnet run
 See [CommonGUI/README.md](CommonGUI/README.md) for detailed documentation.
 
 See [FIX_ITCH_README.md](FIX_ITCH_README.md) for detailed documentation on FIX and ITCH implementations.
+
+## 🔧 Configuration & Testing (NEW)
+
+### Exchange Configuration Management
+
+Manage multiple stock exchange configurations via JSON files or Web API:
+
+```bash
+# View current exchange configurations
+curl http://localhost:5000/api/ExchangeConfig
+
+# Get specific exchange (DSE, CSE, TEST)
+curl http://localhost:5000/api/ExchangeConfig/DSE
+
+# Export configuration
+curl http://localhost:5000/api/ExchangeConfig/DSE/export > dse-backup.json
+
+# Import configuration
+curl -X POST http://localhost:5000/api/ExchangeConfig/import \
+  -H "Content-Type: application/json" \
+  -d @new-exchange.json
+```
+
+**Default Exchanges:**
+- **DSE** - Dhaka Stock Exchange (FIX 4.4, port 5001)
+- **CSE** - Chittagong Stock Exchange (FIX 4.4, port 5002)
+- **DSE-ITCH** - DSE Market Data (ITCH 5.0, port 6001)
+- **DSE-FAST** - DSE Market Data (FAST 1.1, port 6002)
+- **TEST** - Sample Test Exchange (FIX 4.4, port 5999)
+
+Configuration files are located in `configs/exchanges.json`.
+
+### Load Testing & Performance Analysis
+
+Run performance tests to measure throughput and latency:
+
+```bash
+# Start a default load test (600 messages, 10 msg/sec)
+curl -X POST http://localhost:5000/api/LoadTest/start \
+  -H "Content-Type: application/json" \
+  -d @configs/loadtest-default.json
+
+# Check test status
+curl http://localhost:5000/api/LoadTest/{testId}/status
+
+# Get detailed metrics
+curl http://localhost:5000/api/LoadTest/{testId}/results
+```
+
+**Load Test Metrics:**
+- Messages sent/received/failed
+- Average/Min/Max latency (milliseconds)
+- Throughput (messages per second)
+- Success rate percentage
+- Per-message latency tracking
+
+**Pre-configured Test Scenarios:**
+- `loadtest-default.json` - Standard test (600 msgs @ 10/sec)
+- `loadtest-high-throughput.json` - Stress test (12000 msgs @ 100/sec)
+
+### Demo Scenarios & Learning
+
+6 interactive scenarios from basic to advanced:
+
+```bash
+# List all scenarios
+curl http://localhost:5000/api/DemoScenario
+
+# Get scenario categories (Basic, Intermediate, Advanced)
+curl http://localhost:5000/api/DemoScenario/categories
+
+# Execute a scenario
+curl -X POST http://localhost:5000/api/DemoScenario/basic-order-001/execute
+```
+
+**Available Scenarios:**
+1. **Basic Order Placement** - Simple buy/sell orders
+2. **Market Data Consumption** - ITCH or FAST protocol usage
+3. **FIX Session Management** - Logon/logout/heartbeats
+4. **Order Cancel and Replace** - Modify existing orders
+5. **Error Handling** - Recovery from failures
+6. **Performance Testing** - Benchmark throughput
+
+See [CONFIG_LOADTEST_DEMO_GUIDE.md](CONFIG_LOADTEST_DEMO_GUIDE.md) for complete documentation.
 
 ## 🚢 Deployment
 
