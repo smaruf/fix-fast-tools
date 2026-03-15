@@ -39,6 +39,7 @@ SCRIPT_DIR    = Path(__file__).resolve().parent
 REPO_ROOT     = SCRIPT_DIR.parent
 CSPROJ        = SCRIPT_DIR / "EcoSoftBD.Oms.Fast.ReplyFASTMarketData.csproj"
 REPLICATOR_PY = SCRIPT_DIR / "replicator.py"
+GO_DIR        = SCRIPT_DIR / "go"
 
 DEFAULT_MONGO_URI = "mongodb://localhost:27017"
 DEFAULT_DB_NAME   = "OmsTradingApi_CSE_FAST_DB"
@@ -68,13 +69,27 @@ def _has_dotnet() -> bool:
         return False
 
 
+def _has_go() -> bool:
+    try:
+        r = subprocess.run(["go", "version"], capture_output=True, check=True)
+        # e.g. "go version go1.21.0 linux/amd64"
+        parts = r.stdout.decode().split()
+        ver = parts[2].lstrip("go") if len(parts) >= 3 else ""
+        major = int(ver.split(".")[0]) if ver else 0
+        return major >= 1
+    except Exception:
+        return False
+
+
 def _check_deps() -> None:
     print("Dependency check:")
     print(f"  Python    : {sys.version.split()[0]}")
     print(f"  pymongo   : {'✓ installed' if _has_pymongo() else '✗ not installed  (pip install pymongo)'}")
     print(f"  .NET SDK  : {'✓ available (>= 8)' if _has_dotnet() else '✗ not available'}")
+    print(f"  Go        : {'✓ available' if _has_go() else '✗ not available'}")
     print(f"  replicator.py  : {'✓ found' if REPLICATOR_PY.exists() else '✗ missing'}")
     print(f"  .csproj        : {'✓ found' if CSPROJ.exists() else '✗ missing'}")
+    print(f"  go/            : {'✓ found' if GO_DIR.exists() else '✗ missing'}")
 
 
 # ---------------------------------------------------------------------------
@@ -222,23 +237,75 @@ def _run_dotnet(args: argparse.Namespace) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Backend auto-selection
+# Go backend
 # ---------------------------------------------------------------------------
+
+def _run_go(args: argparse.Namespace) -> int:
+    if not _has_go():
+        print("ERROR: Go is not installed.")
+        print("       Download from: https://go.dev/dl/")
+        return 1
+
+    if not GO_DIR.exists():
+        print(f"ERROR: Go source directory not found: {GO_DIR}")
+        return 1
+
+    # Build the Go binary first
+    binary_name = "replicator-go.exe" if sys.platform == "win32" else "replicator-go"
+    binary = GO_DIR / binary_name
+    print(f"Building Go replicator in {GO_DIR} …")
+    build = subprocess.run(
+        ["go", "build", "-o", str(binary), "."],
+        cwd=str(GO_DIR),
+    )
+    if build.returncode != 0:
+        print("Go build failed.")
+        return build.returncode
+
+    print()
+    cmd = [str(binary)]
+    if args.uri:
+        cmd += ["-uri", args.uri]
+    if args.db:
+        cmd += ["-db", args.db]
+    if getattr(args, "collection", None):
+        cmd += ["-col", args.collection]
+    if args.start:
+        cmd += ["-start", args.start]
+    if args.hours:
+        cmd += ["-hours", str(args.hours)]
+    if getattr(args, "verbose", False):
+        cmd += ["-verbose"]
+
+    try:
+        run = subprocess.run(cmd, cwd=str(SCRIPT_DIR))
+    except KeyboardInterrupt:
+        print("\nReplay interrupted by user.")
+        return 0
+    return run.returncode
+
+
+
 
 def _select_backend(args: argparse.Namespace) -> str:
     if args.python:
         return "python"
     if args.dotnet:
         return "dotnet"
+    if getattr(args, "go", False):
+        return "go"
 
-    # Auto-detect: prefer Python if pymongo is installed
+    # Auto-detect: prefer Python if pymongo is installed, then Go, then .NET
     if _has_pymongo():
         return "python"
+    if _has_go():
+        return "go"
     if _has_dotnet():
         return "dotnet"
 
-    print("ERROR: Neither pymongo nor the .NET 8 SDK is available.")
+    print("ERROR: No supported backend found.")
     print("  Install pymongo  :  pip install pymongo")
+    print("  Install Go SDK   :  https://go.dev/dl/")
     print("  Install .NET SDK :  https://dotnet.microsoft.com/download/dotnet/8.0")
     sys.exit(1)
 
@@ -258,6 +325,7 @@ Examples:
   python run_replicator.py --start 2024-03-13         # supply date, prompt rest
   python run_replicator.py --start 2024-03-13 --hours 8
   python run_replicator.py --python                   # force Python backend
+  python run_replicator.py --go                       # force Go backend
   python run_replicator.py --dotnet                   # force .NET  backend
   python run_replicator.py --check-deps               # list available dependencies
   python run_replicator.py --uri mongodb://host:27017 --db MyDb --start 2024-03-13 --hours 24
@@ -268,6 +336,8 @@ Examples:
     grp = p.add_mutually_exclusive_group()
     grp.add_argument("--python", action="store_true",
                      help="Use the Python backend (requires pymongo)")
+    grp.add_argument("--go", action="store_true",
+                     help="Use the Go backend (requires Go 1.21+)")
     grp.add_argument("--dotnet", action="store_true",
                      help="Use the .NET backend (requires .NET 8 SDK)")
 
@@ -277,7 +347,7 @@ Examples:
     p.add_argument("--hours", type=int, metavar="N",
                    help="Replay duration in hours (default: prompted)")
 
-    # MongoDB parameters (Python backend only)
+    # MongoDB parameters
     p.add_argument("--uri",        default="",  metavar="URI",
                    help=f"MongoDB connection URI (default: {DEFAULT_MONGO_URI})")
     p.add_argument("--db",         default="",  metavar="NAME",
@@ -320,6 +390,8 @@ def main() -> int:
 
     if backend == "python":
         return _run_python(args)
+    elif backend == "go":
+        return _run_go(args)
     else:
         return _run_dotnet(args)
 

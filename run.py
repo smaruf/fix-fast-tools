@@ -124,7 +124,7 @@ def run_commongui(args):
     subprocess.run(['dotnet', 'run', '--project', gui_project])
 
 def run_replicator(args):
-    """Run the FAST Market Data Replicator (Python or .NET backend)"""
+    """Run the FAST Market Data Replicator (Python, Go, or .NET backend)"""
     replicator_script = os.path.join('replicator', 'run_replicator.py')
     
     if not os.path.exists(replicator_script):
@@ -142,7 +142,9 @@ def run_replicator(args):
         cmd += ['--uri', args.uri]
     if getattr(args, 'db', None):
         cmd += ['--db', args.db]
-    if getattr(args, 'dotnet', False):
+    if getattr(args, 'go', False):
+        cmd += ['--go']
+    elif getattr(args, 'dotnet', False):
         cmd += ['--dotnet']
     
     try:
@@ -199,6 +201,7 @@ Examples:
   %(prog)s --commongui              # Run CommonGUI directly
   %(prog)s --replicator             # Run FAST market data replicator (interactive)
   %(prog)s --replicator --start 2024-03-13 --hours 8  # Replicator with params
+  %(prog)s --replicator --go        # Replicator using Go backend
   %(prog)s --replicator --dotnet    # Replicator using .NET backend
   %(prog)s --info                   # Show system information
         '''
@@ -226,6 +229,8 @@ Examples:
                         help='Replicator: MongoDB connection URI')
     parser.add_argument('--db', metavar='NAME',
                         help='Replicator: MongoDB database name')
+    parser.add_argument('--go', action='store_true',
+                        help='Replicator: force the Go backend')
     parser.add_argument('--dotnet', action='store_true',
                         help='Replicator: force the .NET backend')
     parser.add_argument('--port', type=int,
