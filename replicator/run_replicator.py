@@ -27,7 +27,7 @@ import argparse
 import os
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
@@ -164,8 +164,6 @@ def _run_python(args: argparse.Namespace) -> int:
     print()
     start  = _get_start_date(args.start)
     hours  = _get_hours(args.hours)
-    end    = start.replace(hour=0, minute=0, second=0, microsecond=0)
-    from datetime import timedelta
     end    = start + timedelta(hours=hours)
 
     print()
