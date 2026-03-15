@@ -123,6 +123,33 @@ def run_commongui(args):
     build_project(gui_project)
     subprocess.run(['dotnet', 'run', '--project', gui_project])
 
+def run_replicator(args):
+    """Run the FAST Market Data Replicator (Python or .NET backend)"""
+    replicator_script = os.path.join('replicator', 'run_replicator.py')
+    
+    if not os.path.exists(replicator_script):
+        print(f"Error: Replicator script not found at {replicator_script}")
+        sys.exit(1)
+    
+    cmd = [sys.executable, replicator_script]
+    
+    # Forward optional replay arguments
+    if getattr(args, 'start', None):
+        cmd += ['--start', args.start]
+    if getattr(args, 'hours', None):
+        cmd += ['--hours', str(args.hours)]
+    if getattr(args, 'uri', None):
+        cmd += ['--uri', args.uri]
+    if getattr(args, 'db', None):
+        cmd += ['--db', args.db]
+    if getattr(args, 'dotnet', False):
+        cmd += ['--dotnet']
+    
+    try:
+        subprocess.run(cmd)
+    except KeyboardInterrupt:
+        print("\nReplicator interrupted.")
+
 def show_info():
     """Show system and project information"""
     print("FAST Tools - System Information")
@@ -146,6 +173,7 @@ def show_info():
         ('Tools', 'Original console application'),
         ('ChinPakFIXFastTools', 'Universal FIX/FAST/ITCH tools with CLI'),
         ('CommonGUI', 'Universal GUI for all stock exchanges'),
+        ('replicator', 'CSE FAST Market Data Replay tool (Python + .NET)'),
     ]
     
     for name, desc in projects:
@@ -169,6 +197,9 @@ Examples:
   %(prog)s --chinpak                # Run ChinPakFIXFastTools (CLI mode)
   %(prog)s --chinpak --gui          # Run CommonGUI
   %(prog)s --commongui              # Run CommonGUI directly
+  %(prog)s --replicator             # Run FAST market data replicator (interactive)
+  %(prog)s --replicator --start 2024-03-13 --hours 8  # Replicator with params
+  %(prog)s --replicator --dotnet    # Replicator using .NET backend
   %(prog)s --info                   # Show system information
         '''
     )
@@ -185,6 +216,18 @@ Examples:
                         help='Run CommonGUI (use with --chinpak for GUI mode)')
     parser.add_argument('--commongui', action='store_true',
                         help='Run CommonGUI directly')
+    parser.add_argument('--replicator', action='store_true',
+                        help='Run the FAST Market Data Replicator')
+    parser.add_argument('--start', metavar='DATE',
+                        help='Replicator: start date yyyy-MM-dd (or yyyy-MM-dd HH:mm:ss)')
+    parser.add_argument('--hours', type=int, metavar='N',
+                        help='Replicator: replay duration in hours')
+    parser.add_argument('--uri', metavar='URI',
+                        help='Replicator: MongoDB connection URI')
+    parser.add_argument('--db', metavar='NAME',
+                        help='Replicator: MongoDB database name')
+    parser.add_argument('--dotnet', action='store_true',
+                        help='Replicator: force the .NET backend')
     parser.add_argument('--port', type=int,
                         help='Port for web server (default: 5000)')
     parser.add_argument('--info', action='store_true',
@@ -200,21 +243,26 @@ Examples:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(script_dir)
     
-    # Check for .NET
-    get_dotnet_command()
-    
     if args.info:
         show_info()
     elif args.cli:
+        # Check for .NET only when actually needed
+        get_dotnet_command()
         run_cli(args)
     elif args.web:
+        get_dotnet_command()
         run_web(args)
     elif args.tools:
+        get_dotnet_command()
         run_original_tools(args)
     elif args.chinpak:
+        get_dotnet_command()
         run_chinpak_tools(args)
     elif args.commongui:
+        get_dotnet_command()
         run_commongui(args)
+    elif args.replicator:
+        run_replicator(args)
     else:
         # Default: show help and info
         parser.print_help()
