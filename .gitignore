@@ -65,6 +65,10 @@ __pycache__/
 venv/
 env/
 
+# Go build artifacts
+replicator/go/replicator-go
+replicator/go/replicator-go.exe
+
 # IDE
 .vscode/
 .vs/

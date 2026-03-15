@@ -2,24 +2,21 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>EcoSoftBD.Oms.Fast.ReplyFASTMarketData</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EcoSoftBD.Oms.Fast.Services\EcoSoftBD.Oms.Fast.Services.csproj" />
-    <ProjectReference Include="..\EcoSoftBD.Oms.Fast.Db\EcoSoftBD.Oms.Fast.Db.csproj" />
-    <ProjectReference Include="..\EcoSoftBD.Oms.Fast.Message\EcoSoftBD.Oms.Fast.Message.csproj" />
-    <ProjectReference Include="..\EcoSoftBD.Oms.Common\EcoSoftBD.Oms.Common.csproj" />
+    <ProjectReference Include="..\FastTools.Core\FastTools.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.28.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>
