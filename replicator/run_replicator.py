@@ -43,7 +43,7 @@ GO_DIR        = SCRIPT_DIR / "go"
 
 DEFAULT_MONGO_URI = "mongodb://localhost:27017"
 DEFAULT_DB_NAME   = "OmsTradingApi_CSE_FAST_DB"
-DEFAULT_COLLECTION = "FastIncomingMessages"
+DEFAULT_COLLECTION = "FastIncomingMessage"
 
 
 # ---------------------------------------------------------------------------
