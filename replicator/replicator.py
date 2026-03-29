@@ -6,6 +6,9 @@ Replays historical FAST market data messages from a MongoDB collection,
 decoding binary payloads and structured JSON fields for analysis or
 testing purposes.
 
+This file has been extended to optionally PUBLISH RawMsg payloads to a
+multicast group/port (e.g. 239.100.140.50:7540) during replay.
+
 Requirements:
     pip install pymongo
 
@@ -21,8 +24,105 @@ from __future__ import annotations
 
 import base64
 import json
+import socket
+import struct
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Tuple
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Any
+
+
+# ---------------------------------------------------------------------------
+# Multicast config helpers
+# ---------------------------------------------------------------------------
+
+DEFAULT_MCAST_IP = "239.100.140.50"
+DEFAULT_MCAST_PORT = 7540
+DEFAULT_MCAST_TTL = 1
+
+
+def _load_appsettings(appsettings_path: Path) -> Dict[str, Any]:
+    """
+    Best-effort load of appsettings.json-like file.
+    Returns {} if not found or invalid.
+    """
+    try:
+        if not appsettings_path.exists():
+            return {}
+        return json.loads(appsettings_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _get_mcast_settings(appsettings_path: Optional[Path] = None) -> Tuple[str, int, int]:
+    """
+    Returns (ip, port, ttl) from appsettings.json (if present), otherwise defaults.
+    """
+    if appsettings_path is None:
+        # replicator.py lives in replicator/
+        appsettings_path = Path(__file__).resolve().parent / "appsettings.json"
+
+    cfg = _load_appsettings(appsettings_path)
+
+    ip = cfg.get("MultiCastConnectionIP", DEFAULT_MCAST_IP)
+
+    port_raw = cfg.get("MultiCastConnectionPort", DEFAULT_MCAST_PORT)
+    try:
+        port = int(port_raw)
+    except Exception:
+        port = DEFAULT_MCAST_PORT
+
+    # Optional support if you later add it
+    ttl_raw = cfg.get("MultiCastTTL", DEFAULT_MCAST_TTL)
+    try:
+        ttl = int(ttl_raw)
+    except Exception:
+        ttl = DEFAULT_MCAST_TTL
+
+    return str(ip), port, ttl
+
+
+class MulticastPublisher:
+    """
+    UDP multicast publisher (sender).
+    """
+
+    def __init__(self, group_ip: str, port: int, ttl: int = 1) -> None:
+        self.group_ip = group_ip
+        self.port = port
+        self.ttl = ttl
+
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        # TTL as a single signed byte
+        self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", int(ttl)))
+
+    def send(self, payload: bytes) -> None:
+        self.sock.sendto(payload, (self.group_ip, self.port))
+
+    def close(self) -> None:
+        try:
+            self.sock.close()
+        except Exception:
+            pass
+
+
+def _rawmsg_to_bytes(raw_msg: Any) -> Optional[bytes]:
+    """
+    Convert MongoDB RawMsg field (bytes or base64 string) to bytes.
+    """
+    if raw_msg is None:
+        return None
+
+    if isinstance(raw_msg, bytes):
+        return raw_msg
+
+    if isinstance(raw_msg, str):
+        # stored base64 in Mongo?
+        try:
+            return base64.b64decode(raw_msg)
+        except Exception:
+            return None
+
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -153,15 +253,7 @@ def process_message(msg: Dict, template_map: Optional[Dict[int, str]] = None) ->
 
     # 1. Decode binary payload when present
     if raw_msg:
-        raw_bytes: Optional[bytes] = None
-        if isinstance(raw_msg, bytes):
-            raw_bytes = raw_msg
-        elif isinstance(raw_msg, str):
-            try:
-                raw_bytes = base64.b64decode(raw_msg)
-            except Exception:
-                pass
-
+        raw_bytes = _rawmsg_to_bytes(raw_msg)
         if raw_bytes:
             try:
                 result["binary"] = decode_binary(raw_bytes, template_map)
@@ -201,15 +293,10 @@ class FastReplicator:
         Optional dict of ``{template_id: name}`` to override/extend the
         built-in :data:`TEMPLATE_NAMES`.
 
-    Examples
-    --------
-    >>> r = FastReplicator("mongodb://localhost:27017", "MyDb")
-    >>> r.connect()
-    >>> r.print_status()
-    >>> from datetime import datetime, timezone
-    >>> start = datetime(2024, 3, 13, tzinfo=timezone.utc)
-    >>> r.replay(start, start.replace(hour=23, minute=59))
-    >>> r.close()
+    Multicast publishing
+    --------------------
+    If publish_multicast=True, RawMsg (bytes/base64) will be sent via UDP
+    to MultiCastConnectionIP:MultiCastConnectionPort from appsettings.json.
     """
 
     def __init__(
@@ -315,6 +402,7 @@ class FastReplicator:
         end: datetime,
         progress_interval: int = 100,
         verbose: bool = False,
+        publish_multicast: bool = True,
     ) -> Dict:
         """Replay all messages in the date window ``[start, end)``.
 
@@ -326,54 +414,83 @@ class FastReplicator:
             Print a progress line every *N* successfully processed messages.
         verbose:
             When ``True`` print per-message details for MDIncrementalRefresh.
+        publish_multicast:
+            When True, send RawMsg bytes to the multicast group/port.
 
         Returns
         -------
         dict
             ``{"total": int, "processed": int, "errors": int,
+               "published": int, "publish_errors": int,
                "error_summary": {str: int}}``
         """
         messages  = self.get_messages(start, end)
         total     = len(messages)
         processed = 0
         errors    = 0
+        published = 0
+        publish_errors = 0
         error_summary: Dict[str, int] = {}
         error_examples: Dict[str, str] = {}
+
+        pub: Optional[MulticastPublisher] = None
+        if publish_multicast:
+            ip, port, ttl = _get_mcast_settings()
+            pub = MulticastPublisher(ip, port, ttl)
+            print(f"Multicast publish: {ip}:{port} (ttl={ttl})")
+            print()
 
         print(f"Found {total:,} messages to replay")
         print()
 
-        for msg in messages:
-            result = process_message(msg, self.template_map)
-            ts_str = ""
-            ts_val = msg.get("SendingDateTimeUtc")
-            if isinstance(ts_val, datetime):
-                ts_str = ts_val.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        try:
+            for msg in messages:
+                result = process_message(msg, self.template_map)
+                ts_str = ""
+                ts_val = msg.get("SendingDateTimeUtc")
+                if isinstance(ts_val, datetime):
+                    ts_str = ts_val.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
 
-            if result["success"]:
-                processed += 1
+                if result["success"]:
+                    processed += 1
 
-                if verbose and msg.get("MsgName") == "MDIncrementalRefresh":
-                    flds  = result.get("fields") or {}
-                    items = flds.get("IncRefMDEntries", {}).get("Items") if isinstance(flds, dict) else None
-                    count = len(items) if isinstance(items, list) else 0
-                    print(f"  \u2713 MDIncrementalRefresh  {ts_str}  ch={msg.get('Channel')}  entries={count}")
+                    # Publish RawMsg (FAST binary) via multicast
+                    if pub is not None:
+                        raw_bytes = _rawmsg_to_bytes(msg.get("RawMsg"))
+                        if raw_bytes:
+                            try:
+                                pub.send(raw_bytes)
+                                published += 1
+                            except Exception:
+                                publish_errors += 1
 
-                if processed % progress_interval == 0:
-                    print(f"  Processed {processed:,} messages...")
-            else:
-                errors += 1
-                key = result.get("error") or "Unknown error"
-                error_summary[key] = error_summary.get(key, 0) + 1
-                if key not in error_examples:
-                    ch = msg.get("Channel", "")
-                    error_examples[key] = f"{ts_str}  ch={ch}"
+                    if verbose and msg.get("MsgName") == "MDIncrementalRefresh":
+                        flds  = result.get("fields") or {}
+                        items = flds.get("IncRefMDEntries", {}).get("Items") if isinstance(flds, dict) else None
+                        count = len(items) if isinstance(items, list) else 0
+                        print(f"  ✓ MDIncrementalRefresh  {ts_str}  ch={msg.get('Channel')}  entries={count}")
+
+                    if processed % progress_interval == 0:
+                        print(f"  Processed {processed:,} messages...")
+                else:
+                    errors += 1
+                    key = result.get("error") or "Unknown error"
+                    error_summary[key] = error_summary.get(key, 0) + 1
+                    if key not in error_examples:
+                        ch = msg.get("Channel", "")
+                        error_examples[key] = f"{ts_str}  ch={ch}"
+        finally:
+            if pub is not None:
+                pub.close()
 
         print()
         print("Summary:")
         print(f"  Total messages       : {total:,}")
         print(f"  Successfully decoded : {processed:,}")
         print(f"  Errors               : {errors:,}")
+        if publish_multicast:
+            print(f"  Published (RawMsg)   : {published:,}")
+            print(f"  Publish errors       : {publish_errors:,}")
 
         if error_summary:
             print()
@@ -384,10 +501,12 @@ class FastReplicator:
                     print(f"          first: {error_examples[key]}")
 
         return {
-            "total":         total,
-            "processed":     processed,
-            "errors":        errors,
-            "error_summary": error_summary,
+            "total":          total,
+            "processed":      processed,
+            "errors":         errors,
+            "published":      published,
+            "publish_errors": publish_errors,
+            "error_summary":  error_summary,
         }
 
     # ------------------------------------------------------------------
