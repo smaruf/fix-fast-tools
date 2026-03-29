@@ -34,12 +34,16 @@ func main() {
 	fmt.Println()
 
 	// --- CLI flags ---
-	uri     := flag.String("uri",     "mongodb://localhost:27017",  "MongoDB connection URI")
-	dbName  := flag.String("db",      "OmsTradingApi_CSE_FAST_DB", "MongoDB database name")
-	col     := flag.String("col",     "FastIncomingMessages",       "MongoDB collection name")
-	startS  := flag.String("start",   "",                           "Start date: yyyy-MM-dd or yyyy-MM-dd HH:mm:ss (UTC)")
-	hoursN  := flag.Int("hours",      0,                            "Replay duration in hours (> 0)")
-	verbose := flag.Bool("verbose",   false,                        "Verbose output for MDIncrementalRefresh messages")
+	uri      := flag.String("uri",        "mongodb://localhost:27017",  "MongoDB connection URI")
+	dbName   := flag.String("db",         "OmsTradingApi_CSE_FAST_DB", "MongoDB database name")
+	col      := flag.String("col",        "FastIncomingMessages",       "MongoDB collection name")
+	startS   := flag.String("start",      "",                           "Start date: yyyy-MM-dd or yyyy-MM-dd HH:mm:ss (UTC)")
+	hoursN   := flag.Int("hours",         0,                            "Replay duration in hours (> 0)")
+	verbose  := flag.Bool("verbose",      false,                        "Verbose output for MDIncrementalRefresh messages")
+	publish   := flag.Bool("publish",      true,                         "Publish RawMsg bytes to multicast group (default: true)")
+	mcastIP   := flag.String("mcast-ip",   repl.DefaultMcastIP,          "Multicast group IP")
+	mcastPort := flag.Int("mcast-port",    repl.DefaultMcastPort,        "Multicast UDP port")
+	mcastTTL  := flag.Int("mcast-ttl",     repl.DefaultMcastTTL,         "Multicast IP TTL")
 	flag.Parse()
 
 	// --- Connect ---
@@ -81,6 +85,10 @@ func main() {
 	_, err = r.Replay(ctx, start, end, repl.Options{
 		ProgressInterval: 100,
 		Verbose:          *verbose,
+		PublishMulticast: *publish,
+		MulticastIP:      *mcastIP,
+		MulticastPort:    *mcastPort,
+		MulticastTTL:     *mcastTTL,
 	})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR during replay: %v\n", err)

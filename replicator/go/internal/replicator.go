@@ -21,8 +21,10 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"net"
 	"sort"
 	"strings"
+	"syscall"
 	"time"
 	"unicode"
 
@@ -31,6 +33,54 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+// ---------------------------------------------------------------------------
+// Multicast defaults (match Python replicator.py constants)
+// ---------------------------------------------------------------------------
+
+const (
+	DefaultMcastIP   = "239.100.140.50"
+	DefaultMcastPort = 7540
+	DefaultMcastTTL  = 1
+)
+
+// MulticastPublisher sends UDP datagrams to a multicast group.
+type MulticastPublisher struct {
+	conn *net.UDPConn
+}
+
+// NewMulticastPublisher creates a publisher that sends to group:port via UDP multicast.
+// ttl sets IP_MULTICAST_TTL; pass DefaultMcastTTL (1) for local-network delivery.
+func NewMulticastPublisher(group string, port, ttl int) (*MulticastPublisher, error) {
+	addr, err := net.ResolveUDPAddr("udp4", fmt.Sprintf("%s:%d", group, port))
+	if err != nil {
+		return nil, err
+	}
+	conn, err := net.DialUDP("udp4", nil, addr)
+	if err != nil {
+		return nil, err
+	}
+	// Set IP_MULTICAST_TTL so packets don't cross router boundaries unexpectedly.
+	if rc, rcErr := conn.SyscallConn(); rcErr == nil {
+		_ = rc.Control(func(fd uintptr) {
+			_ = syscall.SetsockoptInt(int(fd), syscall.IPPROTO_IP, syscall.IP_MULTICAST_TTL, ttl)
+		})
+	}
+	return &MulticastPublisher{conn: conn}, nil
+}
+
+// Send transmits payload to the multicast group.
+func (p *MulticastPublisher) Send(payload []byte) error {
+	_, err := p.conn.Write(payload)
+	return err
+}
+
+// Close releases the underlying UDP socket.
+func (p *MulticastPublisher) Close() {
+	if p.conn != nil {
+		_ = p.conn.Close()
+	}
+}
 
 // ---------------------------------------------------------------------------
 // FAST template ID → name map (CSE FAST template set)
@@ -245,14 +295,24 @@ type Options struct {
 	Verbose bool
 	// ExtraTemplateNames extends TemplateNames with additional ID→name mappings.
 	ExtraTemplateNames map[int]string
+	// PublishMulticast enables sending RawMsg bytes to a UDP multicast group.
+	PublishMulticast bool
+	// MulticastIP is the multicast group address (default: DefaultMcastIP).
+	MulticastIP string
+	// MulticastPort is the UDP destination port (default: DefaultMcastPort).
+	MulticastPort int
+	// MulticastTTL is the IP multicast TTL (default: DefaultMcastTTL = 1).
+	MulticastTTL int
 }
 
 // Stats summarises a completed replay.
 type Stats struct {
-	Total        int
-	Processed    int
-	Errors       int
-	ErrorSummary map[string]int
+	Total         int
+	Processed     int
+	Errors        int
+	Published     int
+	PublishErrors int
+	ErrorSummary  map[string]int
 }
 
 // Replicator connects to MongoDB and replays FastIncomingMessage documents.
@@ -422,16 +482,40 @@ func (r *Replicator) Replay(ctx context.Context, start, end time.Time, opts Opti
 		opts.ProgressInterval = 100
 	}
 
+	// Apply multicast defaults
+	if opts.MulticastIP == "" {
+		opts.MulticastIP = DefaultMcastIP
+	}
+	if opts.MulticastPort <= 0 {
+		opts.MulticastPort = DefaultMcastPort
+	}
+	if opts.MulticastTTL <= 0 {
+		opts.MulticastTTL = DefaultMcastTTL
+	}
+
 	messages, err := r.GetMessages(ctx, start, end)
 	if err != nil {
 		return Stats{}, err
 	}
 
-	total := len(messages)
-	processed := 0
-	errors := 0
-	errorSummary := make(map[string]int)
+	total         := len(messages)
+	processed     := 0
+	errors        := 0
+	published     := 0
+	publishErrors := 0
+	errorSummary  := make(map[string]int)
 	errorExamples := make(map[string]string)
+
+	// Set up multicast publisher if requested
+	var pub *MulticastPublisher
+	if opts.PublishMulticast {
+		pub, err = NewMulticastPublisher(opts.MulticastIP, opts.MulticastPort, opts.MulticastTTL)
+		if err != nil {
+			return Stats{}, fmt.Errorf("multicast publisher: %w", err)
+		}
+		defer pub.Close()
+		fmt.Printf("Multicast publish: %s:%d (ttl=%d)\n\n", opts.MulticastIP, opts.MulticastPort, opts.MulticastTTL)
+	}
 
 	fmt.Printf("Found %d messages to replay\n\n", total)
 
@@ -441,6 +525,18 @@ func (r *Replicator) Replay(ctx context.Context, start, end time.Time, opts Opti
 
 		if result.Success {
 			processed++
+
+			// Publish RawMsg (FAST binary) via multicast
+			if pub != nil {
+				rawBytes := msg.RawMsg.Data
+				if len(rawBytes) > 0 {
+					if sendErr := pub.Send(rawBytes); sendErr != nil {
+						publishErrors++
+					} else {
+						published++
+					}
+				}
+			}
 
 			if opts.Verbose && msg.MsgName == "MDIncrementalRefresh" {
 				entries := 0
@@ -476,6 +572,10 @@ func (r *Replicator) Replay(ctx context.Context, start, end time.Time, opts Opti
 	fmt.Printf("  Total messages       : %d\n", total)
 	fmt.Printf("  Successfully decoded : %d\n", processed)
 	fmt.Printf("  Errors               : %d\n", errors)
+	if opts.PublishMulticast {
+		fmt.Printf("  Published (RawMsg)   : %d\n", published)
+		fmt.Printf("  Publish errors       : %d\n", publishErrors)
+	}
 
 	if len(errorSummary) > 0 {
 		fmt.Println()
@@ -501,9 +601,11 @@ func (r *Replicator) Replay(ctx context.Context, start, end time.Time, opts Opti
 	}
 
 	return Stats{
-		Total:        total,
-		Processed:    processed,
-		Errors:       errors,
-		ErrorSummary: errorSummary,
+		Total:         total,
+		Processed:     processed,
+		Errors:        errors,
+		Published:     published,
+		PublishErrors: publishErrors,
+		ErrorSummary:  errorSummary,
 	}, nil
 }
