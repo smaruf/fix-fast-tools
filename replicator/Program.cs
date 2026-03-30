@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Net;
+using System.Net.Sockets;
 using System.Text.Json;
 using FastTools.Core.Models;
 using FastTools.Core.Services;
@@ -9,6 +11,16 @@ using MongoDB.Driver;
 
 namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
 {
+    // ---------------------------------------------------------------------------
+    // Multicast defaults (match Python replicator.py constants)
+    // ---------------------------------------------------------------------------
+    internal static class MulticastDefaults
+    {
+        public const string IP   = "239.100.140.50";
+        public const int    Port = 7540;
+        public const int    TTL  = 1;
+    }
+
     // ---------------------------------------------------------------------------
     // Local model mapping to the FastIncomingMessages MongoDB collection.
     // Fields match the schema used when the FAST client stores incoming packets.
@@ -67,6 +79,11 @@ namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
             string mongoUri   = config["MongoDb:ServerFast"] ?? "mongodb://localhost:27017";
             string dbName     = config["MongoDb:FastDb"]     ?? "OmsTradingApi_CSE_FAST_DB";
             string collection = config["MongoDb:Collection"] ?? "FastIncomingMessages";
+
+            // Multicast settings
+            string mcastIP   = config["MultiCastConnectionIP"] ?? MulticastDefaults.IP;
+            int    mcastPort = int.TryParse(config["MultiCastConnectionPort"], out int cfgPort) ? cfgPort : MulticastDefaults.Port;
+            int    mcastTTL  = int.TryParse(config["MultiCastTTL"],            out int cfgTTL)  ? cfgTTL  : MulticastDefaults.TTL;
 
             // Optional: load FAST template XML for richer template name resolution
             var decoder      = new FastMessageDecoder();
@@ -135,7 +152,7 @@ namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
 
             try
             {
-                await ReplayMessagesAsync(col, decoder, startDateTime, endDateTime);
+                await ReplayMessagesAsync(col, decoder, startDateTime, endDateTime, mcastIP, mcastPort, mcastTTL);
                 Console.WriteLine();
                 Console.WriteLine("Replay completed successfully!");
             }
@@ -237,7 +254,10 @@ namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
             IMongoCollection<FastIncomingMessage> col,
             FastMessageDecoder decoder,
             DateTime startDateTime,
-            DateTime endDateTime)
+            DateTime endDateTime,
+            string mcastIP   = MulticastDefaults.IP,
+            int    mcastPort = MulticastDefaults.Port,
+            int    mcastTTL  = MulticastDefaults.TTL)
         {
             var filter = Builders<FastIncomingMessage>.Filter.Gte(x => x.SendingDateTimeUtc, startDateTime)
                        & Builders<FastIncomingMessage>.Filter.Lt(x  => x.SendingDateTimeUtc, endDateTime);
@@ -246,11 +266,20 @@ namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
                 .SortBy(x => x.SendingDateTimeUtc)
                 .ToListAsync();
 
-            int total     = messages.Count;
-            int processed = 0;
-            int errors    = 0;
+            int total         = messages.Count;
+            int processed     = 0;
+            int errors        = 0;
+            int published     = 0;
+            int publishErrors = 0;
             var errorSummary  = new Dictionary<string, int>();
             var errorExamples = new Dictionary<string, string>();
+
+            // Set up UDP multicast publisher
+            using var udpClient = new UdpClient();
+            udpClient.Ttl = (short)mcastTTL;
+            var mcastEndpoint = new IPEndPoint(IPAddress.Parse(mcastIP), mcastPort);
+            Console.WriteLine($"Multicast publish: {mcastIP}:{mcastPort} (ttl={mcastTTL})");
+            Console.WriteLine();
 
             Console.WriteLine($"Found {total:N0} messages to replay");
             Console.WriteLine();
@@ -262,6 +291,23 @@ namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
                 if (result.Success)
                 {
                     processed++;
+
+                    // Publish RawMsg (FAST binary) via multicast
+                    if (msg.RawMsg != null && msg.RawMsg.Length > 0)
+                    {
+                        try
+                        {
+                            udpClient.Send(msg.RawMsg, msg.RawMsg.Length, mcastEndpoint);
+                            published++;
+                        }
+                        catch (SocketException ex)
+                        {
+                            publishErrors++;
+                            if (publishErrors == 1)
+                                Console.Error.WriteLine($"  WARN: multicast send failed ({ex.SocketErrorCode}): {ex.Message}");
+                        }
+                    }
+
                     if (processed % 100 == 0)
                         Console.WriteLine($"  Processed {processed:N0} messages...");
                 }
@@ -281,6 +327,8 @@ namespace EcoSoftBD.Oms.Fast.ReplyFASTMarketData
             Console.WriteLine($"  Total messages       : {total:N0}");
             Console.WriteLine($"  Successfully decoded : {processed:N0}");
             Console.WriteLine($"  Errors               : {errors:N0}");
+            Console.WriteLine($"  Published (RawMsg)   : {published:N0}");
+            Console.WriteLine($"  Publish errors       : {publishErrors:N0}");
 
             if (errors > 0)
             {
